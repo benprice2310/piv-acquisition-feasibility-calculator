@@ -18,6 +18,10 @@
         <label class="form-label" for="prt-k">Design multiplier <span class="text-muted">RMS</span>
           <input class="form-control" id="prt-k" type="number" min="0" max="10" step="0.5" value="3" data-tooltip="Safety multiplier applied to RMS fluctuations. Three RMS is conservative when fluctuations are approximately Gaussian." data-tooltip-placement="top">
         </label>
+        <div class="form-check form-switch">
+          <input class="form-check-input" id="prt-laser-fixed" type="checkbox" checked data-tooltip="When enabled, recommendations prioritize processing changes and clearly identify limits that processing cannot recover." data-tooltip-placement="top">
+          <label class="form-check-label" for="prt-laser-fixed">Laser timing fixed</label>
+        </div>
       </div>
     </section>
 
@@ -122,6 +126,15 @@
       </div>
     </div>
   </section>
+
+  <section class="prt-recommendation-section" aria-live="polite">
+    <div class="viz-row prt-recommendation-heading">
+      <h3>Parameter-based recommendations</h3>
+      <span class="viz-badge" id="prt-recommendation-mode">Fixed laser timing</span>
+    </div>
+    <ol class="prt-recommendation-list" id="prt-recommendations"></ol>
+    <p class="text-small text-muted">Recommendations are planning guidance. Confirm them with correlation maps, uncertainty estimates, and a parameter-sensitivity check on representative image pairs.</p>
+  </section>
 </div>
 
 <style>
@@ -171,6 +184,12 @@
   #piv-retention-tool .prt-sampling-label { font-weight: 500; paint-order: stroke; stroke: var(--background); stroke-width: 5; stroke-linejoin: round; }
   #piv-retention-tool .prt-sampling-result { display: flex; gap: 18px; justify-content: space-between; margin-top: 8px; }
   #piv-retention-tool .prt-checks { margin-top: 10px; }
+  #piv-retention-tool .prt-recommendation-section { margin-top: 24px; }
+  #piv-retention-tool .prt-recommendation-heading { justify-content: space-between; align-items: center; }
+  #piv-retention-tool .prt-recommendation-heading h3 { margin: 0; }
+  #piv-retention-tool .prt-recommendation-list { margin: 10px 0 8px; padding-left: 24px; }
+  #piv-retention-tool .prt-recommendation-list li { margin: 0 0 10px; }
+  #piv-retention-tool .prt-recommendation-list strong { font-weight: 500; }
   @media (max-width: 700px) {
     #piv-retention-tool .prt-sections { grid-template-columns: 1fr; }
   }
@@ -204,6 +223,9 @@
   const val = id => Math.max(0, Number(root.querySelector(`#${id}`).value) || 0);
   const fmtMs = ms => ms < 0.01 ? `${(ms * 1000).toFixed(1)} µs` : ms < 1 ? `${ms.toFixed(3)} ms` : ms < 100 ? `${ms.toFixed(2)} ms` : `${ms.toFixed(1)} ms`;
   const fmtLength = metres => metres < 0.001 ? `${(metres * 1e6).toFixed(0)} µm` : metres < 1 ? `${(metres * 1000).toFixed(metres < 0.01 ? 1 : 0)} mm` : `${metres.toFixed(2)} m`;
+  const standardWindows = [8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024];
+  const nextStandardWindow = value => standardWindows.find(size => size >= value) || standardWindows[standardWindows.length - 1];
+  const previousStandardWindow = value => standardWindows.slice().reverse().find(size => size <= value) || standardWindows[0];
 
   const defs = add('defs');
   const clip = add('clipPath', { id: 'prt-clip' }, '', defs);
@@ -301,6 +323,137 @@
     root.querySelector('#prt-length-limits').textContent = `At mean + ${k.toFixed(k % 1 ? 1 : 0)} RMS: ${fmtLength(theoryLength)} theoretical and ${fmtLength(conservativeLength)} conservative.`;
   };
 
+  const renderRecommendations = parameters => {
+    const {
+      laserFixed, rate, dt, designU, actualPx, allowedPx, shiftFraction,
+      scale, windowPx, overlap, structureMm, independentWidths, vectorSamples,
+      actualSheet, allowedSheet, dtSheet, temporalSamples, spatialStatus,
+      temporalStatus, status
+    } = parameters;
+    const items = [];
+    const recommend = (heading, detail) => items.push({ heading, detail });
+    const maxSpatialWindowPx = structureMm / Math.max(3 * scale, 1e-12);
+
+    if (actualSheet > allowedSheet) {
+      if (laserFixed) {
+        recommend(
+          'Out-of-plane particle loss cannot be recovered by processing.',
+          `The design traversal is ${actualSheet.toFixed(3)} mm versus the ${allowedSheet.toFixed(3)} mm limit. Mask low-correlation regions and reject unreliable vectors, but retaining instantaneous pairs requires a thicker effective sheet or Δt below ${fmtMs(0.8 * dtSheet)}.`
+        );
+      } else {
+        recommend(
+          'Shorten the pulse-pair separation for sheet retention.',
+          `Set Δt to ${fmtMs(0.8 * dtSheet)} or less. Processing cannot reconstruct particles after they leave the illuminated sheet.`
+        );
+      }
+    }
+
+    if (actualPx > allowedPx) {
+      const requiredInitialPx = nextStandardWindow(actualPx / Math.max(0.8 * shiftFraction, 0.01));
+      const finalWindowPx = previousStandardWindow(Math.min(windowPx, maxSpatialWindowPx));
+      if (laserFixed) {
+        if (requiredInitialPx < 1024) {
+          recommend(
+            'Use a larger predictor pass with window deformation.',
+            `Start near ${requiredInitialPx}×${requiredInitialPx} px to capture the ${actualPx.toFixed(1)} px displacement, then deform and reduce toward ${finalWindowPx}×${finalWindowPx} px. Confirm the final pass retains a distinct correlation peak.`
+          );
+        } else {
+          recommend(
+            'The in-plane displacement is beyond a practical processing correction.',
+            `The calculated shift is ${actualPx.toFixed(1)} px. A very large search window would strongly filter the flow; shorter Δt or a wider field of view is needed.`
+          );
+        }
+      } else {
+        const targetDt = dt * allowedPx * 0.8 / Math.max(actualPx, 1e-12);
+        recommend(
+          'Shorten the pulse-pair separation.',
+          `Use approximately ${fmtMs(targetDt)} or less to return the design displacement to 80% of the configured correlation limit.`
+        );
+      }
+    } else if (actualPx < 2 && designU > 0) {
+      if (laserFixed) {
+        recommend(
+          'Protect precision at low particle-image displacement.',
+          `The design shift is only ${actualPx.toFixed(2)} px. Use a calibrated subpixel peak estimator, remove image bias carefully, and consider ensemble correlation for statistically stationary measurements.`
+        );
+      } else {
+        const targetDt = 4 * scale / designU;
+        recommend(
+          'Increase pulse separation to improve displacement precision.',
+          `A Δt near ${fmtMs(targetDt)} would produce about 4 px displacement, provided it remains below the sheet-retention and correlation limits.`
+        );
+      }
+    }
+
+    if (independentWidths < 3) {
+      const suggestedFinalPx = previousStandardWindow(maxSpatialWindowPx);
+      if (maxSpatialWindowPx >= standardWindows[0]) {
+        recommend(
+          'Reduce the final interrogation window.',
+          `Finish near ${suggestedFinalPx}×${suggestedFinalPx} px so the ${structureMm.toFixed(1)} mm structure spans about three independent window widths. Use larger early passes only as predictors.`
+        );
+      } else {
+        recommend(
+          'The desired structure is below the current optical sampling limit.',
+          `Even an ${standardWindows[0]} px final window is too wide for three independent samples. Increase magnification, reduce the field of view, or use a higher-resolution camera.`
+        );
+      }
+    } else if (vectorSamples < 5) {
+      const requiredOverlap = Math.max(0, Math.min(0.75, 1 - structureMm / Math.max(5 * windowPx * scale, 1e-12)));
+      const suggestedOverlap = Math.ceil(requiredOverlap * 20) * 5;
+      recommend(
+        'Increase overlap to improve vector-grid sampling.',
+        `Try about ${Math.max(suggestedOverlap, Math.round(overlap * 100))}% overlap to place at least five vectors across the desired structure. This increases vector density, not independent spatial resolution.`
+      );
+    } else if (overlap > 0.75) {
+      recommend(
+        'Avoid relying on very high overlap as added resolution.',
+        `${Math.round(overlap * 100)}% overlap produces strongly correlated neighboring vectors. Reduce it toward 50–75% unless dense output is specifically required.`
+      );
+    }
+
+    if (temporalSamples < 5) {
+      const conservativeLengthMm = 5 * designU / rate * 1000;
+      if (laserFixed) {
+        recommend(
+          temporalSamples < 2 ? 'Do not interpret the desired scale as time resolved.' : 'Treat the desired scale as marginally time resolved.',
+          `The structure receives ${temporalSamples.toFixed(2)} fields during advection. With fixed ${rate.toFixed(1)} Hz sampling, restrict conservative time-resolved claims to structures of roughly ${conservativeLengthMm.toFixed(0)} mm or larger; phase or ensemble averaging is appropriate only for repeatable flow.`
+        );
+      } else {
+        const requiredRate = 5 * designU / Math.max(structureMm / 1000, 1e-12);
+        recommend(
+          'Increase the velocity-field acquisition rate.',
+          `Approximately ${requiredRate.toFixed(1)} Hz is needed for five fields across the ${structureMm.toFixed(1)} mm structure at the design velocity.`
+        );
+      }
+    }
+
+    if (status === 'pass' && spatialStatus === 'pass' && temporalStatus === 'pass' && actualPx >= 2) {
+      recommend(
+        'Keep the current core settings.',
+        'All three checks are conservative. Preserve the current timing and final window unless validation shows a systematic bias or unacceptable vector loss.'
+      );
+    }
+
+    recommend(
+      'Run a processing-sensitivity check before production.',
+      'Compare the chosen final window with one standard size above and below. Inspect valid-vector yield, peak ratio, spatial smoothing, mean bias, RMS stability, and an uncertainty estimate on representative image pairs.'
+    );
+
+    root.querySelector('#prt-recommendation-mode').textContent = laserFixed ? 'Fixed laser timing' : 'Acquisition adjustable';
+    const list = root.querySelector('#prt-recommendations');
+    list.replaceChildren();
+    items.slice(0, 5).forEach(item => {
+      const row = document.createElement('li');
+      const heading = document.createElement('strong');
+      const detail = document.createElement('span');
+      heading.textContent = item.heading;
+      detail.textContent = ` ${item.detail}`;
+      row.append(heading, detail);
+      list.appendChild(row);
+    });
+  };
+
   const controls = Array.from(root.querySelectorAll('input'));
   const useRate = root.querySelector('#prt-use-rate');
   const update = () => {
@@ -318,6 +471,7 @@
     const sheetFraction = val('prt-sheet-fraction') / 100;
     const overlap = Math.min(0.99, val('prt-overlap') / 100);
     const structureMm = Math.max(val('prt-structure'), 1e-9);
+    const laserFixed = root.querySelector('#prt-laser-fixed').checked;
 
     const designU = mean + k * urms;
     const scale = fov / pixels;
@@ -368,6 +522,12 @@
     root.querySelector('#prt-spatial-context').textContent = `${vectorSamples.toFixed(1)} plotted vectors — ${spatialStatus === 'pass' ? 'conservative' : spatialStatus === 'margin' ? 'theoretical' : 'insufficient'}`;
     root.querySelector('#prt-temporal-check').textContent = Number.isFinite(temporalSamples) ? `${temporalSamples.toFixed(2)} fields` : 'No advection limit';
     root.querySelector('#prt-temporal-context').textContent = temporalStatus === 'pass' ? 'At least five samples' : temporalStatus === 'margin' ? 'Two to five samples' : 'Fewer than two samples';
+    renderRecommendations({
+      laserFixed, rate, dt, designU, actualPx, allowedPx, shiftFraction,
+      scale, windowPx, overlap, structureMm, independentWidths, vectorSamples,
+      actualSheet, allowedSheet, dtSheet, temporalSamples, spatialStatus,
+      temporalStatus, status
+    });
 
     while (zones.firstChild) zones.removeChild(zones.firstChild);
     while (dynamic.firstChild) dynamic.removeChild(dynamic.firstChild);

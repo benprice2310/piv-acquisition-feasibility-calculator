@@ -12,6 +12,8 @@ Open `index.html` in a modern web browser. No installation or server is required
 
 Enter the laser timing, expected flow velocities, camera field of view, interrogation settings, laser-sheet thickness, and desired structure length. The tool updates its operating maps and feasibility checks immediately.
 
+The recommendation engine converts failed or marginal checks into parameter-specific next steps. Enable **Laser timing fixed** to prioritize processing changes such as multi-pass predictors, window deformation, final-window sizing, overlap, validation, and ensemble methods. When a limitation cannot be recovered in processing—particularly out-of-plane particle loss or temporal aliasing—the tool says so explicitly instead of suggesting a misleading numerical adjustment.
+
 ## Model
 
 The particle-pair calculation uses the design velocities
@@ -47,3 +49,13 @@ This is an acquisition-planning calculator, not a guarantee of successful PIV pr
 ## Source
 
 The editable visualization fragment is in `src/piv-acquisition-feasibility-calculator.html`. The root `index.html` is the standalone browser version.
+
+## Validation
+
+Run the recommendation scenarios with Node.js:
+
+```sh
+node tests/recommendations.test.mjs
+```
+
+The test covers fixed-laser processing advice, adjustable-acquisition advice, unrecoverable out-of-plane loss, and spatial-resolution limits.
