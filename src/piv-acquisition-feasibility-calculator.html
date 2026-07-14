@@ -1,0 +1,406 @@
+<div id="piv-retention-tool" class="prt-root">
+  <div class="prt-sections">
+    <section>
+      <h3>Timing and flow</h3>
+      <div class="viz-controls">
+        <label class="form-label" for="prt-rate">Laser pair rate <span class="text-muted">Hz</span>
+          <input class="form-control" id="prt-rate" type="number" min="0.1" max="10000" step="0.1" value="15" data-tooltip="Number of PIV image pairs acquired per second. This sets measurement cadence, not the time between pulses within a pair." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-dt">Pulse-pair separation <span class="text-muted">ms</span>
+          <input class="form-control" id="prt-dt" type="number" min="0.001" max="1000" step="0.01" value="1.00" data-tooltip="Time between the two laser pulses used for one velocity calculation. Shorten it to reduce particle displacement and sheet loss." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-mean">Mean in-plane speed <span class="text-muted">m/s</span>
+          <input class="form-control" id="prt-mean" type="number" min="0" max="1000" step="0.01" value="0.50" data-tooltip="Expected mean particle speed parallel to the laser sheet. Use the largest relevant speed in the field of view." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-urms">In-plane RMS fluctuation <span class="text-muted">m/s</span>
+          <input class="form-control" id="prt-urms" type="number" min="0" max="1000" step="0.01" value="0.10" data-tooltip="RMS turbulent velocity fluctuation parallel to the sheet. It is added to the mean using the selected design multiplier." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-k">Design multiplier <span class="text-muted">RMS</span>
+          <input class="form-control" id="prt-k" type="number" min="0" max="10" step="0.5" value="3" data-tooltip="Safety multiplier applied to RMS fluctuations. Three RMS is conservative when fluctuations are approximately Gaussian." data-tooltip-placement="top">
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h3>Image-plane retention</h3>
+      <div class="viz-controls">
+        <label class="form-label" for="prt-fov">Field-of-view width <span class="text-muted">mm</span>
+          <input class="form-control" id="prt-fov" type="number" min="0.01" max="100000" step="0.1" value="100" data-tooltip="Physical width represented by the image. Together with image width, this determines millimetres per pixel." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-pixels">Image width <span class="text-muted">pixels</span>
+          <input class="form-control" id="prt-pixels" type="number" min="16" max="100000" step="1" value="2048" data-tooltip="Number of camera pixels spanning the stated field-of-view width after any cropping or binning." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-window">Interrogation window <span class="text-muted">pixels</span>
+          <input class="form-control" id="prt-window" type="number" min="4" max="1024" step="4" value="32" data-tooltip="Final PIV interrogation-window width. Larger windows tolerate more displacement but reduce spatial resolution." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-shift-fraction">Allowed window displacement <span class="text-muted">%</span>
+          <input class="form-control" id="prt-shift-fraction" type="number" min="1" max="100" step="1" value="25" data-tooltip="Maximum particle-image displacement as a fraction of the interrogation window. Twenty-five percent is a conservative starting point." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-overlap">Window overlap <span class="text-muted">%</span>
+          <input class="form-control" id="prt-overlap" type="number" min="0" max="95" step="5" value="50" data-tooltip="Overlap between adjacent interrogation windows. It reduces vector spacing but does not recover spatial resolution filtered by the window size." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-structure">Desired structure length <span class="text-muted">mm</span>
+          <input class="form-control" id="prt-structure" type="number" min="0.001" max="100000" step="0.1" value="50" data-tooltip="Smallest flow-structure length you want to resolve. It is checked independently against interrogation-window size, vector spacing, and temporal sampling." data-tooltip-placement="top">
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h3>Laser-sheet retention</h3>
+      <div class="viz-controls">
+        <label class="form-label" for="prt-sheet">Sheet thickness <span class="text-muted">mm</span>
+          <input class="form-control" id="prt-sheet" type="number" min="0.001" max="1000" step="0.1" value="2.0" data-tooltip="Effective illuminated sheet thickness at the measurement plane. Use the region with sufficient particle-image intensity, not merely the nominal optical width." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-wrms">Out-of-plane RMS speed <span class="text-muted">mm/s</span>
+          <input class="form-control" id="prt-wrms" type="number" min="0" max="100000" step="0.1" value="2.0" data-tooltip="RMS velocity normal to the laser sheet. This component moves particles out of the illuminated measurement plane." data-tooltip-placement="top">
+        </label>
+        <label class="form-label" for="prt-sheet-fraction">Allowed sheet traversal <span class="text-muted">%</span>
+          <input class="form-control" id="prt-sheet-fraction" type="number" min="1" max="100" step="1" value="25" data-tooltip="Allowed out-of-plane travel as a fraction of sheet thickness. A smaller value preserves more common particles between images." data-tooltip-placement="top">
+        </label>
+      </div>
+    </section>
+  </div>
+
+  <div class="viz-row prt-actions">
+    <button type="button" class="btn" id="prt-use-rate">Use single-pulse interval</button>
+    <span class="text-small text-muted" id="prt-cadence-note">15 Hz gives one velocity field every 66.7 ms; pulse-pair separation is independent.</span>
+  </div>
+
+  <div class="viz-grid prt-stats" aria-live="polite">
+    <div class="card viz-stat">
+      <span class="text-muted">In-plane displacement</span>
+      <span class="viz-stat-value" id="prt-shift-value">16.4 px</span>
+      <span id="prt-shift-limit">limit 8.0 px</span>
+    </div>
+    <div class="card viz-stat">
+      <span class="text-muted">Out-of-plane travel</span>
+      <span class="viz-stat-value" id="prt-sheet-value">0.006 mm</span>
+      <span id="prt-sheet-limit">limit 0.500 mm</span>
+    </div>
+    <div class="card viz-stat">
+      <span class="text-muted">Recommended pair separation</span>
+      <span class="viz-stat-value" id="prt-recommended">≤ 0.39 ms</span>
+      <span id="prt-limiter">limited by image displacement</span>
+    </div>
+  </div>
+
+  <svg class="prt-chart" viewBox="0 0 736 250" role="img" aria-labelledby="prt-title prt-desc">
+    <title id="prt-title">PIV pulse-pair separation operating range</title>
+    <desc id="prt-desc">A logarithmic time axis compares the chosen pulse separation with image-plane and laser-sheet retention limits. The conservative zone includes a twenty percent margin.</desc>
+  </svg>
+
+  <div class="card prt-result" aria-live="polite">
+    <strong id="prt-status">Reduce pulse-pair separation</strong>
+    <span id="prt-result-detail">The current particle-image shift exceeds the configured correlation limit.</span>
+  </div>
+
+  <section class="prt-sampling-section">
+    <h3>Flow-structure sampling across successive PIV fields</h3>
+    <svg class="prt-sampling-chart" viewBox="0 0 736 410" role="img" aria-labelledby="prt-sampling-title prt-sampling-desc">
+      <title id="prt-sampling-title">Resolvable structure length and convection velocity at the selected repetition rate</title>
+      <desc id="prt-sampling-desc">A log-log chart separates structures with fewer than two samples, two to five samples, and at least five samples as they pass through the measurement plane.</desc>
+    </svg>
+    <div class="card prt-sampling-result" aria-live="polite">
+      <span id="prt-frequency-limits">Frequency limits: 7.5 Hz theoretical and 3.0 Hz conservative.</span>
+      <span id="prt-length-limits">At the design velocity: 107 mm theoretical and 267 mm conservative.</span>
+    </div>
+    <div class="viz-grid prt-checks" aria-live="polite">
+      <div class="card viz-stat">
+        <span class="text-muted">Particle-pair retention</span>
+        <span class="viz-stat-value" id="prt-pair-check">Likely loss</span>
+        <span id="prt-pair-context">Reduce pulse-pair separation</span>
+      </div>
+      <div class="card viz-stat">
+        <span class="text-muted">Spatial structure resolution</span>
+        <span class="viz-stat-value" id="prt-spatial-check">10.0 window widths</span>
+        <span id="prt-spatial-context">20.0 plotted vectors across structure</span>
+      </div>
+      <div class="card viz-stat">
+        <span class="text-muted">Temporal structure sampling</span>
+        <span class="viz-stat-value" id="prt-temporal-check">0.94 fields</span>
+        <span id="prt-temporal-context">Fewer than two samples</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  #piv-retention-tool { width: 100%; color: var(--foreground); }
+  #piv-retention-tool .prt-sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  #piv-retention-tool h3 { margin: 0 0 8px; }
+  #piv-retention-tool .viz-controls { align-items: end; }
+  #piv-retention-tool .form-label { min-width: 0; flex: 1 1 150px; }
+  #piv-retention-tool .prt-actions { margin: 12px 0; align-items: center; }
+  #piv-retention-tool .prt-stats { margin-bottom: 8px; }
+  #piv-retention-tool .prt-chart { width: 100%; height: auto; display: block; overflow: visible; }
+  #piv-retention-tool .prt-grid { stroke: var(--border); stroke-width: 1; }
+  #piv-retention-tool .prt-axis { stroke: var(--muted-foreground); stroke-width: 1.25; }
+  #piv-retention-tool .prt-conservative-zone { fill: var(--viz-series-2); opacity: 0.13; }
+  #piv-retention-tool .prt-margin-zone { fill: var(--viz-series-1); opacity: 0.13; }
+  #piv-retention-tool .prt-fail-zone { fill: var(--muted); opacity: 0.45; }
+  #piv-retention-tool .prt-image-line { stroke: var(--viz-series-1); stroke-width: 3; }
+  #piv-retention-tool .prt-sheet-line { stroke: var(--viz-series-2); stroke-width: 3; stroke-dasharray: 8 5; }
+  #piv-retention-tool .prt-choice-line { stroke: var(--foreground); stroke-width: 3; }
+  #piv-retention-tool .prt-rate-line { stroke: var(--muted-foreground); stroke-width: 2; stroke-dasharray: 3 4; }
+  #piv-retention-tool .prt-tick,
+  #piv-retention-tool .prt-label,
+  #piv-retention-tool .prt-zone-label { fill: var(--foreground); font-family: inherit; font-size: var(--font-size-base); }
+  #piv-retention-tool .prt-tick { fill: var(--muted-foreground); }
+  #piv-retention-tool .prt-label { font-weight: 500; paint-order: stroke; stroke: var(--background); stroke-width: 5; stroke-linejoin: round; }
+  #piv-retention-tool .prt-zone-label { fill: var(--muted-foreground); font-weight: 500; }
+  #piv-retention-tool .prt-result { display: flex; gap: 10px; align-items: baseline; margin-top: 8px; }
+  #piv-retention-tool .prt-result strong { white-space: nowrap; }
+  #piv-retention-tool .prt-sampling-section { margin-top: 24px; }
+  #piv-retention-tool .prt-sampling-chart { width: 100%; height: auto; display: block; overflow: visible; }
+  #piv-retention-tool .prt-sampling-grid { stroke: var(--border); stroke-width: 1; }
+  #piv-retention-tool .prt-sampling-axis { stroke: var(--muted-foreground); stroke-width: 1.25; }
+  #piv-retention-tool .prt-sampling-unresolved { fill: var(--muted); opacity: 0.45; }
+  #piv-retention-tool .prt-sampling-theory-zone { fill: var(--viz-series-1); opacity: 0.13; }
+  #piv-retention-tool .prt-sampling-conservative-zone { fill: var(--viz-series-2); opacity: 0.13; }
+  #piv-retention-tool .prt-sampling-theory-line { stroke: var(--viz-series-1); stroke-width: 2.5; }
+  #piv-retention-tool .prt-sampling-conservative-line { stroke: var(--viz-series-2); stroke-width: 2.5; stroke-dasharray: 9 6; }
+  #piv-retention-tool .prt-sampling-flow-band { fill: var(--viz-series-3); opacity: 0.13; }
+  #piv-retention-tool .prt-sampling-mean-line { stroke: var(--viz-series-3); stroke-width: 2; stroke-dasharray: 4 5; }
+  #piv-retention-tool .prt-sampling-speed-line { stroke: var(--viz-series-3); stroke-width: 2.5; }
+  #piv-retention-tool .prt-sampling-structure-line { stroke: var(--foreground); stroke-width: 2.5; stroke-dasharray: 3 4; }
+  #piv-retention-tool .prt-sampling-theory-marker { fill: var(--background); stroke: var(--viz-series-1); stroke-width: 3; }
+  #piv-retention-tool .prt-sampling-conservative-marker { fill: var(--viz-series-2); stroke: var(--background); stroke-width: 2; }
+  #piv-retention-tool .prt-sampling-label,
+  #piv-retention-tool .prt-sampling-tick { fill: var(--foreground); font-family: inherit; font-size: var(--font-size-base); }
+  #piv-retention-tool .prt-sampling-tick { fill: var(--muted-foreground); }
+  #piv-retention-tool .prt-sampling-label { font-weight: 500; paint-order: stroke; stroke: var(--background); stroke-width: 5; stroke-linejoin: round; }
+  #piv-retention-tool .prt-sampling-result { display: flex; gap: 18px; justify-content: space-between; margin-top: 8px; }
+  #piv-retention-tool .prt-checks { margin-top: 10px; }
+  @media (max-width: 700px) {
+    #piv-retention-tool .prt-sections { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    #piv-retention-tool .prt-result { flex-direction: column; }
+    #piv-retention-tool .prt-sampling-result { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #piv-retention-tool .prt-dynamic { transition: x 180ms ease, width 180ms ease; }
+  }
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById('piv-retention-tool');
+  const svg = root.querySelector('.prt-chart');
+  const ns = 'http://www.w3.org/2000/svg';
+  const W = 736, H = 250;
+  const m = { top: 42, right: 28, bottom: 62, left: 72 };
+  const pw = W - m.left - m.right;
+  const ph = H - m.top - m.bottom;
+  const tMin = 0.001, tMax = 1000;
+  const sx = t => m.left + (Math.log10(Math.max(tMin, Math.min(tMax, t))) - Math.log10(tMin)) / (Math.log10(tMax) - Math.log10(tMin)) * pw;
+  const add = (name, attrs = {}, text = '', parent = svg) => {
+    const node = document.createElementNS(ns, name);
+    Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+    if (text) node.textContent = text;
+    parent.appendChild(node);
+    return node;
+  };
+  const val = id => Math.max(0, Number(root.querySelector(`#${id}`).value) || 0);
+  const fmtMs = ms => ms < 0.01 ? `${(ms * 1000).toFixed(1)} µs` : ms < 1 ? `${ms.toFixed(3)} ms` : ms < 100 ? `${ms.toFixed(2)} ms` : `${ms.toFixed(1)} ms`;
+  const fmtLength = metres => metres < 0.001 ? `${(metres * 1e6).toFixed(0)} µm` : metres < 1 ? `${(metres * 1000).toFixed(metres < 0.01 ? 1 : 0)} mm` : `${metres.toFixed(2)} m`;
+
+  const defs = add('defs');
+  const clip = add('clipPath', { id: 'prt-clip' }, '', defs);
+  add('rect', { x: m.left, y: m.top, width: pw, height: ph }, '', clip);
+  const zones = add('g', { 'clip-path': 'url(#prt-clip)' });
+  const dynamic = add('g', { 'clip-path': 'url(#prt-clip)' });
+  const labels = add('g');
+  const ticks = [0.001, 0.01, 0.1, 1, 10, 100, 1000];
+  const tickLabels = ['1 µs', '10 µs', '0.1 ms', '1 ms', '10 ms', '100 ms', '1 s'];
+  ticks.forEach((t, i) => {
+    const x = sx(t);
+    add('line', { x1: x, y1: m.top, x2: x, y2: m.top + ph, class: 'prt-grid' });
+    add('text', { x, y: m.top + ph + 28, 'text-anchor': 'middle', class: 'prt-tick' }, tickLabels[i]);
+  });
+  add('line', { x1: m.left, y1: m.top + ph, x2: m.left + pw, y2: m.top + ph, class: 'prt-axis' });
+  add('text', { x: m.left + pw / 2, y: H - 12, 'text-anchor': 'middle', class: 'prt-label' }, 'Pulse-pair separation, Δt');
+
+  const samplingSvg = root.querySelector('.prt-sampling-chart');
+  const SW = 736, SH = 410;
+  const sm = { top: 30, right: 28, bottom: 72, left: 92 };
+  const spw = SW - sm.left - sm.right;
+  const sph = SH - sm.top - sm.bottom;
+  const slMin = 1e-4, slMax = 2;
+  const suMin = 1e-3, suMax = 10;
+  const ssx = length => sm.left + (Math.log10(Math.max(slMin, Math.min(slMax, length))) - Math.log10(slMin)) / (Math.log10(slMax) - Math.log10(slMin)) * spw;
+  const ssy = speed => sm.top + sph - (Math.log10(Math.max(suMin, Math.min(suMax, speed))) - Math.log10(suMin)) / (Math.log10(suMax) - Math.log10(suMin)) * sph;
+  const sClampX = x => Math.max(sm.left, Math.min(sm.left + spw, x));
+  const samplingDefs = add('defs', {}, '', samplingSvg);
+  const samplingClip = add('clipPath', { id: 'prt-sampling-clip' }, '', samplingDefs);
+  add('rect', { x: sm.left, y: sm.top, width: spw, height: sph }, '', samplingClip);
+  const samplingDynamic = add('g', { 'clip-path': 'url(#prt-sampling-clip)' }, '', samplingSvg);
+  const samplingXTicks = [1e-4, 1e-3, 1e-2, 1e-1, 1];
+  const samplingXLabels = ['0.1 mm', '1 mm', '1 cm', '10 cm', '1 m'];
+  const samplingYTicks = [1e-3, 1e-2, 1e-1, 1, 10];
+  const samplingYLabels = ['1 mm/s', '1 cm/s', '0.1 m/s', '1 m/s', '10 m/s'];
+  samplingXTicks.forEach((value, i) => {
+    const x = ssx(value);
+    add('line', { x1: x, y1: sm.top, x2: x, y2: sm.top + sph, class: 'prt-sampling-grid' }, '', samplingSvg);
+    add('text', { x, y: sm.top + sph + 29, 'text-anchor': 'middle', class: 'prt-sampling-tick' }, samplingXLabels[i], samplingSvg);
+  });
+  samplingYTicks.forEach((value, i) => {
+    const y = ssy(value);
+    add('line', { x1: sm.left, y1: y, x2: sm.left + spw, y2: y, class: 'prt-sampling-grid' }, '', samplingSvg);
+    add('text', { x: sm.left - 14, y: y + 5, 'text-anchor': 'end', class: 'prt-sampling-tick' }, samplingYLabels[i], samplingSvg);
+  });
+  add('line', { x1: sm.left, y1: sm.top + sph, x2: sm.left + spw, y2: sm.top + sph, class: 'prt-sampling-axis' }, '', samplingSvg);
+  add('line', { x1: sm.left, y1: sm.top, x2: sm.left, y2: sm.top + sph, class: 'prt-sampling-axis' }, '', samplingSvg);
+  add('text', { x: sm.left + spw / 2, y: SH - 14, 'text-anchor': 'middle', class: 'prt-sampling-label' }, 'Streamwise structure length, L', samplingSvg);
+  add('text', { x: 22, y: sm.top + sph / 2, transform: `rotate(-90 22 ${sm.top + sph / 2})`, 'text-anchor': 'middle', class: 'prt-sampling-label' }, 'Convection velocity, Uc', samplingSvg);
+  const samplingLabels = add('g', {}, '', samplingSvg);
+
+  const updateSampling = (rate, mean, urms, k, designU, structureM) => {
+    while (samplingDynamic.firstChild) samplingDynamic.removeChild(samplingDynamic.firstChild);
+    while (samplingLabels.firstChild) samplingLabels.removeChild(samplingLabels.firstChild);
+    const left = sm.left, right = sm.left + spw, top = sm.top, bottom = sm.top + sph;
+    const theoryTop = sClampX(ssx(2 * suMax / rate));
+    const theoryBottom = sClampX(ssx(2 * suMin / rate));
+    const conservativeTop = sClampX(ssx(5 * suMax / rate));
+    const conservativeBottom = sClampX(ssx(5 * suMin / rate));
+    add('polygon', { points: `${left},${top} ${theoryTop},${top} ${theoryBottom},${bottom} ${left},${bottom}`, class: 'prt-sampling-unresolved' }, '', samplingDynamic);
+    add('polygon', { points: `${theoryTop},${top} ${conservativeTop},${top} ${conservativeBottom},${bottom} ${theoryBottom},${bottom}`, class: 'prt-sampling-theory-zone' }, '', samplingDynamic);
+    add('polygon', { points: `${conservativeTop},${top} ${right},${top} ${right},${bottom} ${conservativeBottom},${bottom}`, class: 'prt-sampling-conservative-zone' }, '', samplingDynamic);
+    add('line', { x1: theoryBottom, y1: bottom, x2: theoryTop, y2: top, class: 'prt-sampling-theory-line' }, '', samplingDynamic);
+    add('line', { x1: conservativeBottom, y1: bottom, x2: conservativeTop, y2: top, class: 'prt-sampling-conservative-line' }, '', samplingDynamic);
+
+    const lowU = Math.max(suMin, mean - k * urms);
+    const highU = Math.min(suMax, Math.max(suMin, mean + k * urms));
+    const shownMeanU = Math.min(suMax, Math.max(suMin, mean));
+    const shownDesignU = Math.min(suMax, Math.max(suMin, designU));
+    add('rect', { x: left, y: ssy(highU), width: spw, height: Math.max(1, ssy(lowU) - ssy(highU)), class: 'prt-sampling-flow-band' }, '', samplingDynamic);
+    add('line', { x1: left, y1: ssy(shownMeanU), x2: right, y2: ssy(shownMeanU), class: 'prt-sampling-mean-line' }, '', samplingDynamic);
+    add('line', { x1: left, y1: ssy(shownDesignU), x2: right, y2: ssy(shownDesignU), class: 'prt-sampling-speed-line' }, '', samplingDynamic);
+
+    const theoryLength = 2 * designU / rate;
+    const conservativeLength = 5 * designU / rate;
+    add('circle', { cx: sClampX(ssx(theoryLength)), cy: ssy(shownDesignU), r: 7, class: 'prt-sampling-theory-marker' }, '', samplingDynamic);
+    add('circle', { cx: sClampX(ssx(conservativeLength)), cy: ssy(shownDesignU), r: 7, class: 'prt-sampling-conservative-marker' }, '', samplingDynamic);
+    add('text', { x: left + 9, y: ssy(shownDesignU) - 10, class: 'prt-sampling-label' }, `Mean + ${k.toFixed(k % 1 ? 1 : 0)} RMS = ${designU.toFixed(3)} m/s`, samplingLabels);
+    add('text', { x: right - 9, y: ssy(shownMeanU) + 20, 'text-anchor': 'end', class: 'prt-sampling-label' }, `Mean = ${mean.toFixed(3)} m/s`, samplingLabels);
+    const structureX = sClampX(ssx(structureM));
+    add('line', { x1: structureX, y1: top, x2: structureX, y2: bottom, class: 'prt-sampling-structure-line' }, '', samplingDynamic);
+    add('text', { x: structureX, y: bottom - 10, 'text-anchor': structureX > left + spw * 0.75 ? 'end' : 'start', class: 'prt-sampling-label' }, ` Desired L = ${fmtLength(structureM)}`, samplingLabels);
+
+    const zoneY = top + 24;
+    const zoneLabels = [
+      [left, theoryTop, 'Unresolved'],
+      [theoryTop, conservativeTop, '2–5 samples'],
+      [conservativeTop, right, '≥5 samples']
+    ];
+    zoneLabels.forEach(([start, end, text]) => {
+      if (end - start > 72) add('text', { x: (start + end) / 2, y: zoneY, 'text-anchor': 'middle', class: 'prt-sampling-label' }, text, samplingLabels);
+    });
+
+    root.querySelector('#prt-frequency-limits').textContent = `Frequency limits: ${(rate / 2).toFixed(2)} Hz theoretical and ${(rate / 5).toFixed(2)} Hz conservative.`;
+    root.querySelector('#prt-length-limits').textContent = `At mean + ${k.toFixed(k % 1 ? 1 : 0)} RMS: ${fmtLength(theoryLength)} theoretical and ${fmtLength(conservativeLength)} conservative.`;
+  };
+
+  const controls = Array.from(root.querySelectorAll('input'));
+  const useRate = root.querySelector('#prt-use-rate');
+  const update = () => {
+    const rate = Math.max(val('prt-rate'), 1e-9);
+    const dt = Math.max(val('prt-dt'), tMin);
+    const mean = val('prt-mean');
+    const urms = val('prt-urms');
+    const k = val('prt-k');
+    const fov = Math.max(val('prt-fov'), 1e-9);
+    const pixels = Math.max(val('prt-pixels'), 1);
+    const windowPx = Math.max(val('prt-window'), 1);
+    const shiftFraction = val('prt-shift-fraction') / 100;
+    const sheet = Math.max(val('prt-sheet'), 1e-9);
+    const wrms = val('prt-wrms');
+    const sheetFraction = val('prt-sheet-fraction') / 100;
+    const overlap = Math.min(0.99, val('prt-overlap') / 100);
+    const structureMm = Math.max(val('prt-structure'), 1e-9);
+
+    const designU = mean + k * urms;
+    const scale = fov / pixels;
+    const allowedPx = windowPx * shiftFraction;
+    const actualPx = designU * dt / scale;
+    const dtImage = designU > 0 ? allowedPx * scale / designU : tMax;
+    const designW = k * wrms;
+    const allowedSheet = sheet * sheetFraction;
+    const actualSheet = designW * dt / 1000;
+    const dtSheet = designW > 0 ? 1000 * allowedSheet / designW : tMax;
+    const hardLimit = Math.min(dtImage, dtSheet);
+    const recommended = 0.8 * hardLimit;
+    const rateInterval = 1000 / rate;
+    const limiter = dtImage <= dtSheet ? 'image displacement' : 'sheet loss';
+    const status = dt <= recommended ? 'pass' : dt <= hardLimit ? 'margin' : 'fail';
+    const windowMm = windowPx * scale;
+    const vectorSpacingMm = windowMm * (1 - overlap);
+    const independentWidths = structureMm / windowMm;
+    const vectorSamples = structureMm / vectorSpacingMm;
+    const temporalSamples = designU > 0 ? rate * (structureMm / 1000) / designU : Infinity;
+    const spatialStatus = independentWidths >= 3 && vectorSamples >= 5 ? 'pass' : independentWidths >= 2 && vectorSamples >= 3 ? 'margin' : 'fail';
+    const temporalStatus = temporalSamples >= 5 ? 'pass' : temporalSamples >= 2 ? 'margin' : 'fail';
+
+    root.querySelector('#prt-shift-value').textContent = `${actualPx.toFixed(1)} px`;
+    root.querySelector('#prt-shift-limit').textContent = `configured limit ${allowedPx.toFixed(1)} px`;
+    root.querySelector('#prt-sheet-value').textContent = `${actualSheet.toFixed(actualSheet < 0.01 ? 4 : 3)} mm`;
+    root.querySelector('#prt-sheet-limit').textContent = `configured limit ${allowedSheet.toFixed(3)} mm`;
+    root.querySelector('#prt-recommended').textContent = `≤ ${fmtMs(recommended)}`;
+    root.querySelector('#prt-limiter').textContent = `limited by ${limiter}`;
+    root.querySelector('#prt-cadence-note').textContent = `${rate.toFixed(1)} Hz gives one velocity field every ${fmtMs(rateInterval)}; pulse-pair separation is independent.`;
+
+    const statusEl = root.querySelector('#prt-status');
+    const detailEl = root.querySelector('#prt-result-detail');
+    if (status === 'pass') {
+      statusEl.textContent = 'Settings are within the conservative region';
+      detailEl.textContent = `Design velocities: ${designU.toFixed(3)} m/s in-plane and ${designW.toFixed(1)} mm/s out-of-plane.`;
+    } else if (status === 'margin') {
+      statusEl.textContent = 'Settings have little correlation margin';
+      detailEl.textContent = `Reduce Δt to ${fmtMs(recommended)} or less; the configured ${limiter} threshold is reached at ${fmtMs(hardLimit)}.`;
+    } else {
+      statusEl.textContent = 'Particle-pair loss is likely';
+      detailEl.textContent = `Reduce Δt below ${fmtMs(hardLimit)}; a conservative target is ${fmtMs(recommended)} or less.`;
+    }
+
+    root.querySelector('#prt-pair-check').textContent = status === 'pass' ? 'Conservative' : status === 'margin' ? 'Limited margin' : 'Likely loss';
+    root.querySelector('#prt-pair-context').textContent = status === 'pass' ? 'Both retention limits pass' : status === 'margin' ? `Reduce Δt toward ${fmtMs(recommended)}` : `${limiter} limit exceeded`;
+    root.querySelector('#prt-spatial-check').textContent = `${independentWidths.toFixed(1)} window widths`;
+    root.querySelector('#prt-spatial-context').textContent = `${vectorSamples.toFixed(1)} plotted vectors — ${spatialStatus === 'pass' ? 'conservative' : spatialStatus === 'margin' ? 'theoretical' : 'insufficient'}`;
+    root.querySelector('#prt-temporal-check').textContent = Number.isFinite(temporalSamples) ? `${temporalSamples.toFixed(2)} fields` : 'No advection limit';
+    root.querySelector('#prt-temporal-context').textContent = temporalStatus === 'pass' ? 'At least five samples' : temporalStatus === 'margin' ? 'Two to five samples' : 'Fewer than two samples';
+
+    while (zones.firstChild) zones.removeChild(zones.firstChild);
+    while (dynamic.firstChild) dynamic.removeChild(dynamic.firstChild);
+    while (labels.firstChild) labels.removeChild(labels.firstChild);
+    const xRec = sx(recommended);
+    const xHard = sx(hardLimit);
+    add('rect', { x: m.left, y: m.top, width: Math.max(0, xRec - m.left), height: ph, class: 'prt-conservative-zone prt-dynamic' }, '', zones);
+    add('rect', { x: xRec, y: m.top, width: Math.max(0, xHard - xRec), height: ph, class: 'prt-margin-zone prt-dynamic' }, '', zones);
+    add('rect', { x: xHard, y: m.top, width: Math.max(0, m.left + pw - xHard), height: ph, class: 'prt-fail-zone prt-dynamic' }, '', zones);
+
+    const xImage = sx(dtImage);
+    const xSheet = sx(dtSheet);
+    const xChoice = sx(dt);
+    const xRate = sx(rateInterval);
+    add('line', { x1: xImage, y1: m.top, x2: xImage, y2: m.top + ph, class: 'prt-image-line prt-dynamic' }, '', dynamic);
+    add('line', { x1: xSheet, y1: m.top, x2: xSheet, y2: m.top + ph, class: 'prt-sheet-line prt-dynamic' }, '', dynamic);
+    add('line', { x1: xRate, y1: m.top, x2: xRate, y2: m.top + ph, class: 'prt-rate-line prt-dynamic' }, '', dynamic);
+    add('line', { x1: xChoice, y1: m.top, x2: xChoice, y2: m.top + ph, class: 'prt-choice-line prt-dynamic' }, '', dynamic);
+
+    add('text', { x: m.left + 10, y: m.top + 24, class: 'prt-zone-label' }, 'Conservative', labels);
+    add('text', { x: xChoice, y: m.top - 20, 'text-anchor': 'middle', class: 'prt-label' }, `Chosen ${fmtMs(dt)}`, labels);
+    add('text', { x: xImage, y: m.top + ph - 42, 'text-anchor': xImage > m.left + pw * 0.75 ? 'end' : 'start', class: 'prt-label' }, ` Image limit ${fmtMs(dtImage)}`, labels);
+    add('text', { x: xSheet, y: m.top + ph - 17, 'text-anchor': xSheet > m.left + pw * 0.75 ? 'end' : 'start', class: 'prt-label' }, ` Sheet limit ${fmtMs(dtSheet)}`, labels);
+    add('text', { x: xRate, y: m.top + 23, 'text-anchor': xRate > m.left + pw * 0.75 ? 'end' : 'start', class: 'prt-label' }, ` 1/${rate.toFixed(1)} Hz`, labels);
+    updateSampling(rate, mean, urms, k, designU, structureMm / 1000);
+  };
+
+  controls.forEach(control => control.addEventListener('input', update));
+  useRate.addEventListener('click', () => {
+    const rate = Math.max(val('prt-rate'), 1e-9);
+    root.querySelector('#prt-dt').value = (1000 / rate).toFixed(3);
+    update();
+  });
+  update();
+})();
+</script>
