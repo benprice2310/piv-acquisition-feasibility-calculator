@@ -4,289 +4,91 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Piv Acquisition Feasibility Calculator</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
-</head>
-<body>
-<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Piv Acquisition Feasibility Calculator" srcdoc="&lt;!doctype html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
-&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Piv Acquisition Feasibility Calculator&lt;/title&gt;
-&lt;style&gt;:root {
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4GhSe0uEYNu4nVl7B14NjP5RFo8KTWBIu0LMrPHV7CU='; style-src 'sha256-gdj8A1i5ED33Yac8K3y9daVBW78pOj1KfSxAT+JlHNk='; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Plan a 2D PIV experiment: pulse separation, particle-image diameter, loss of pairs, spatial resolution and temporal sampling, computed in the browser.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151618" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PIV acquisition feasibility calculator">
+<meta property="og:description" content="Plan a 2D PIV experiment: pulse separation, particle-image diameter, loss of pairs, spatial resolution and temporal sampling, computed in the browser.">
+<title>PIV acquisition feasibility calculator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231876d2'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M7 11h9'/%3E%3Cpath d='M7 21h14'/%3E%3C/g%3E%3Ccircle cx='23' cy='11' r='3' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+/* Design tokens and primitives. Light and dark are both first-class. */
+
+:root {
   color-scheme: light dark;
-  background-color: var(--background) !important;
 
-  /* Agent-facing contract; keep in sync with SKILL.md. */
-  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
-  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
-  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
-  --card-foreground: var(--foreground);
-  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
-  --popover-foreground: var(--foreground);
-  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --background: light-dark(rgb(252 252 253), rgb(21 22 24));
+  --surface: light-dark(rgb(255 255 255), rgb(30 31 34));
+  --foreground: light-dark(rgb(26 28 31), rgb(240 241 243));
+  --muted: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --muted-foreground: light-dark(rgb(26 28 31 / 58%), rgb(240 241 243 / 58%));
+  --border: light-dark(rgb(26 28 31 / 11%), rgb(255 255 255 / 12%));
+  --input: light-dark(rgb(26 28 31 / 14%), rgb(255 255 255 / 16%));
+  --ring: light-dark(rgb(24 118 210), rgb(131 195 255));
+  --primary: light-dark(rgb(24 118 210), rgb(131 195 255));
   --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
-  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
-  --secondary-foreground: var(--foreground);
-  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
-  --muted-foreground: light-dark(
-    rgb(26 28 31 / 49.4%),
-    rgb(255 255 255 / 49.8%)
-  );
-  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
-  --accent-foreground: var(--primary);
-  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
-  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
-  --input: light-dark(
-    rgb(26 28 31 / 11.8%),
-    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
-  );
-  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --accent: light-dark(rgb(232 241 252), rgb(20 40 62));
+
+  --pass: light-dark(rgb(22 128 84), rgb(94 208 155));
+  --pass-bg: light-dark(rgb(22 128 84 / 12%), rgb(94 208 155 / 15%));
+  --margin: light-dark(rgb(176 106 8), rgb(240 178 84));
+  --margin-bg: light-dark(rgb(176 106 8 / 12%), rgb(240 178 84 / 15%));
+  --fail: light-dark(rgb(197 58 32), rgb(255 138 106));
+  --fail-bg: light-dark(rgb(197 58 32 / 12%), rgb(255 138 106 / 15%));
+
+  --series-1: var(--primary);
+  --series-2: light-dark(rgb(214 108 26), rgb(245 165 96));
+  --series-3: light-dark(rgb(37 145 118), rgb(96 205 180));
+  --series-4: light-dark(rgb(139 96 220), rgb(178 152 240));
+
+  --font-sans: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --font-size-base: 14px;
-  --viz-series-1: var(--primary);
-  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
-  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
-  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
-  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
-  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
-
-  /* Internal implementation variables; not part of the agent contract. */
-  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
-    monospace;
-  --font-size-normal: max(11px, var(--font-size-base));
-  --font-size-tooltip: calc(var(--font-size-base) - 1px);
-  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
-  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
-  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
-  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
-  --font-weight-normal: 430;
-  --font-weight-medium: 500;
-  --line-height-normal: calc(var(--font-size-normal) * 1.5);
-  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
-  --line-height-small: calc(var(--font-size-small) + 4px);
-  --radius: 12.5px;
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-2xl: calc(var(--radius) * 1.6);
-  --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
-  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
-
-  /* Legacy aliases; not part of the current agent contract. */
-  --viz-bg: transparent;
-  --viz-panel: var(--card);
-  --viz-border: var(--border);
-  --viz-text: var(--foreground);
-  --viz-muted: var(--muted-foreground);
-  --viz-accent: var(--primary);
-  --viz-accent-text: var(--primary-foreground);
-  --viz-accent-bg: var(--accent);
-  --viz-font-size: var(--font-size-base);
-  --viz-warning: var(--destructive);
-  --color-background-primary: var(--background);
-  --color-text-primary: var(--foreground);
-  --color-border-secondary: var(--border);
+  --radius: 12px;
+  --radius-sm: 7px;
+  --radius-full: 999px;
+  --shadow: 0 1px 2px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 30%));
 }
 
-:root[data-theme=&quot;light&quot;] {
-  color-scheme: light;
-}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
-:root[data-theme=&quot;dark&quot;] {
-  color-scheme: dark;
-}
+* { box-sizing: border-box; }
 
-* {
-  box-sizing: border-box;
-}
+html, body { margin: 0; }
 
-html &gt; body {
-  margin: 0;
-  padding: 5px;
-  color: var(--foreground);
-  background: transparent !important;
-  font-family: var(--font-sans);
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
-}
-
-a {
-  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
-  cursor: pointer;
-  font-weight: var(--viz-font-weight-medium);
-  text-decoration: none;
-  text-underline-offset: 2px;
-}
-
-a:is(:hover, :focus-visible) {
-  text-decoration-line: underline;
-  text-decoration-style: dashed;
-  text-decoration-thickness: 0.5px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-block: 0;
-}
-
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h3,
-h4,
-h5,
-h6 {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.3;
-}
-
-b,
-strong,
-th {
-  font-weight: var(--font-weight-medium);
-}
-
-code:not(pre code) {
-  display: inline;
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
-  background: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.92em;
-  overflow-wrap: anywhere;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  word-break: break-word;
-}
-
-#widget {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
+body {
   padding: 0;
-  background: transparent !important;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
+
+h1, h2, h3, h4, p, figure { margin: 0; }
+h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 1rem; font-weight: 600; }
+h3 { font-size: 0.875rem; font-weight: 600; }
+
+a { color: var(--primary); text-underline-offset: 2px; }
+
+code, .mono { font-family: var(--font-mono); font-size: 0.92em; }
 
 .card {
-  min-width: 0;
-  padding: 12px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  border-radius: var(--radius-2xl);
-  corner-shape: superellipse(1.5);
-  color: var(--card-foreground);
-  background: var(--card);
-}
-
-#widget &gt; :not(.card) {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.tooltip {
-  position: fixed;
-  z-index: 50;
-  top: 0;
-  left: 0;
-  width: max-content;
-  max-width: min(
-    20rem,
-    var(--tooltip-available-width, calc(100vw - 10px)),
-    calc(100vw - 10px)
-  );
-  max-height: min(
-    var(--tooltip-available-height, calc(100vh - 10px)),
-    calc(100vh - 10px)
-  );
-  padding: 4px 8px;
+  padding: 14px 16px;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--popover-foreground);
-  background: var(--popover);
-  box-shadow: none;
-  font-size: var(--font-size-tooltip);
-  line-height: var(--line-height-tooltip);
-  overflow-wrap: break-word;
-  white-space: normal;
-  pointer-events: none;
-  user-select: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 
-.viz-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
-  gap: 10px;
-}
-
-.viz-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.viz-stat-value {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-.viz-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.viz-badge {
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  color: var(--accent-foreground);
-  background: var(--accent);
-  font-weight: var(--font-weight-medium);
-}
-
-small,
-.text-small,
-.viz-badge {
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-small);
-}
-
-.text-muted {
-  color: var(--muted-foreground);
-}
+.text-muted { color: var(--muted-foreground); }
+.text-small { font-size: 0.8125rem; line-height: 1.45; }
 
 .sr-only {
   position: absolute;
@@ -294,1108 +96,2031 @@ small,
   height: 1px;
   padding: 0;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
-  border: 0;
 }
 
-.viz-controls {
+button, input, select { font: inherit; color: inherit; }
+
+.btn {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:hover { background: color-mix(in srgb, var(--foreground) 6%, var(--surface)); }
+.btn:active { transform: translateY(0.5px); }
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn-primary:hover { background: color-mix(in srgb, var(--foreground) 14%, var(--primary)); }
+
+:is(.btn, input, select):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.field { display: grid; gap: 3px; }
+
+.field > .field-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.field-unit { color: var(--muted-foreground); font-size: 0.75rem; }
+
+input[type="number"], select {
+  width: 100%;
+  min-height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+}
+
+input[type="number"]:invalid { border-color: var(--fail); }
+
+.field-check { display: flex; align-items: center; gap: 8px; }
+.field-check input { width: 16px; height: 16px; accent-color: var(--primary); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 9px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.chip::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentcolor;
+  content: "";
+}
+
+.chip-pass { color: var(--pass); background: var(--pass-bg); }
+.chip-margin { color: var(--margin); background: var(--margin-bg); }
+.chip-fail { color: var(--fail); background: var(--fail-bg); }
+
+/* Page layout for the feasibility calculator. */
+
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 20px 56px;
+}
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.masthead p { max-width: 62ch; }
+
+.toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
 
-.viz-controls &gt; .form-label {
+.toolbar select { width: auto; min-width: 210px; }
+
+.layout {
   display: grid;
-  min-width: min(100%, 260px);
-  flex: 1 1 280px;
-  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 18px;
+  margin-top: 18px;
+  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+}
+
+.controls { display: grid; gap: 12px; }
+
+.controls > .card > h2 {
+  display: flex;
   align-items: baseline;
-  gap: 2px 12px;
-  margin-bottom: 0;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
-  grid-column: 1 / -1;
+.field-grid {
+  display: grid;
+  gap: 10px 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.btn,
-.form-check-input,
-.form-control,
-.form-range,
-.form-select {
-  font: inherit;
-}
+.field-grid .span-2 { grid-column: 1 / -1; }
 
-.btn {
-  appearance: button;
-  display: inline-flex;
-  inline-size: fit-content;
-  max-inline-size: 100%;
-  min-height: 28px;
+.results { display: grid; gap: 18px; min-width: 0; }
+
+.verdict {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin: 0;
-  padding: 0 8px;
-  -webkit-app-region: no-drag;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: var(--cursor-interaction, pointer);
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-font-smoothing: antialiased;
+  gap: 8px 14px;
+  border-left: 4px solid var(--muted-foreground);
 }
 
-.btn:is(.btn-block, .viz-tile) {
-  inline-size: 100%;
+.verdict-pass { border-left-color: var(--pass); }
+.verdict-margin { border-left-color: var(--margin); }
+.verdict-fail { border-left-color: var(--fail); }
+
+.verdict-headline { font-size: 1.0625rem; font-weight: 600; }
+.verdict-detail { flex: 1 1 320px; }
+
+.stat-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
-.btn.viz-tile {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  white-space: normal;
+.stat { display: grid; gap: 1px; align-content: start; }
+.stat-label { color: var(--muted-foreground); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-value { font-size: 1.25rem; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat-note { color: var(--muted-foreground); font-size: 0.8125rem; }
+
+figure.chart { display: grid; gap: 6px; }
+figure.chart figcaption { color: var(--muted-foreground); font-size: 0.8125rem; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8125rem; color: var(--muted-foreground); white-space: nowrap; }
+.legend i { width: 16px; height: 0; border-top-width: 3px; border-top-style: solid; }
+
+/* Chart primitives */
+.axis { stroke: var(--muted-foreground); stroke-width: 1.25; fill: none; }
+.grid { stroke: var(--border); stroke-width: 1; }
+.tick { fill: var(--muted-foreground); font-size: 11px; }
+.axis-title { fill: var(--foreground); font-size: 12px; font-weight: 500; }
+.annotation {
+  fill: var(--foreground);
+  font-size: 11px;
+  paint-order: stroke;
+  stroke: var(--background);
+  stroke-width: 4;
+  stroke-linejoin: round;
 }
 
-a.btn {
-  cursor: pointer;
-  text-decoration: none;
+.zone-pass { fill: var(--pass); opacity: 0.14; }
+.zone-margin { fill: var(--margin); opacity: 0.16; }
+.zone-fail { fill: var(--fail); opacity: 0.12; }
+.zone-floor { fill: var(--muted-foreground); opacity: 0.14; }
+.zone-label { fill: var(--muted-foreground); font-size: 11px; font-weight: 600; letter-spacing: 0.02em; }
+
+.marker-choice { stroke: var(--foreground); stroke-width: 2.5; }
+.marker-image { stroke: var(--series-1); stroke-width: 2; }
+.marker-sheet { stroke: var(--series-2); stroke-width: 2; stroke-dasharray: 7 4; }
+.marker-correlation { stroke: var(--series-3); stroke-width: 2; stroke-dasharray: 2 3; }
+.marker-rate { stroke: var(--muted-foreground); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.curve-merit { stroke: var(--series-3); stroke-width: 2.5; fill: none; }
+.curve-error { stroke: var(--series-4); stroke-width: 2.5; fill: none; stroke-dasharray: 6 4; }
+.target-line { stroke: var(--muted-foreground); stroke-width: 1; stroke-dasharray: 2 3; }
+.band-flow { fill: var(--series-3); opacity: 0.13; }
+.line-design { stroke: var(--series-3); stroke-width: 2; }
+.line-mean { stroke: var(--series-3); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.line-structure { stroke: var(--foreground); stroke-width: 2; stroke-dasharray: 3 3; }
+.line-window { stroke: var(--series-1); stroke-width: 2; }
+.line-nyquist { stroke: var(--series-1); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.dot-theory { fill: var(--background); stroke: var(--series-1); stroke-width: 3; }
+.dot-conservative { fill: var(--series-2); stroke: var(--background); stroke-width: 2; }
+.band-ok { stroke: var(--pass); stroke-width: 2.5; }
+.band-bad { stroke: var(--fail); stroke-width: 2.5; }
+
+/* Checks */
+.checks { display: grid; gap: 8px; }
+
+.check {
+  display: grid;
+  align-items: baseline;
+  gap: 2px 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--muted);
+  border-radius: var(--radius-sm);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) auto;
 }
 
-.btn:not(:disabled):hover {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
+.check-pass { border-left-color: var(--pass); }
+.check-margin { border-left-color: var(--margin); background: var(--margin-bg); }
+.check-fail { border-left-color: var(--fail); background: var(--fail-bg); }
 
-.btn-primary {
-  border-color: transparent;
+.check-label { font-weight: 600; }
+.check-value { font-variant-numeric: tabular-nums; }
+.check-detail { grid-column: 1 / -1; color: var(--muted-foreground); font-size: 0.8125rem; }
+.check-formula { grid-column: 1 / -1; color: var(--muted-foreground); font-family: var(--font-mono); font-size: 0.75rem; }
+
+details.method summary { cursor: pointer; font-weight: 600; }
+details.method[open] summary { margin-bottom: 10px; }
+.method dl { display: grid; gap: 8px 18px; margin: 0; grid-template-columns: max-content minmax(0, 1fr); }
+.method dt { font-family: var(--font-mono); font-size: 0.8125rem; }
+.method dd { margin: 0; color: var(--muted-foreground); font-size: 0.8125rem; }
+.method ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted-foreground); font-size: 0.8125rem; }
+
+.toast {
+  position: fixed;
+  z-index: 20;
+  bottom: 18px;
+  left: 50%;
+  padding: 8px 14px;
+  transform: translate(-50%, 12px);
+  border-radius: var(--radius-full);
   color: var(--primary-foreground);
   background: var(--foreground);
-  background-clip: padding-box;
-}
-
-.btn-primary .text-muted {
-  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
-}
-
-.btn-primary:not(:disabled):hover {
-  background: color-mix(in srgb, var(--foreground) 80%, transparent);
-  background-clip: padding-box;
-}
-
-.btn-ghost {
-  border-color: transparent;
-  color: var(--muted-foreground);
-  background: transparent;
-}
-
-.btn-ghost:not(:disabled):hover {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-[data-lucide] {
-  stroke-width: 1.6;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--foreground);
-}
-
-.form-control {
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  padding: 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--foreground);
-  background: var(--secondary);
-}
-
-.form-control::placeholder {
-  color: var(--muted-foreground);
-}
-
-.form-control[type=&quot;file&quot;] {
-  padding: 0;
-  overflow: hidden;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control[type=&quot;file&quot;]::file-selector-button {
-  min-height: 26px;
-  margin-right: 8px;
-  padding: 0 8px;
-  border: 0;
-  border-right: 1px solid var(--input);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: inherit;
-  font: inherit;
-}
-
-.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-control-color[type=&quot;color&quot;] {
-  width: 40px;
-  height: 28px;
-  padding: 3px;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
-  border: 0;
-  border-radius: calc(var(--radius-lg) - 4px);
-  corner-shape: superellipse(1.5);
-}
-
-textarea.form-control {
-  height: auto;
-  min-height: 72px;
-  padding: 8px 10px;
-  resize: vertical;
-}
-
-.form-control:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-control:disabled,
-.form-select:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.form-select {
-  appearance: none;
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  margin: 0;
-  padding: 0 32px 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--foreground);
-  background-color: var(--secondary);
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
-    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
-  background-position:
-    calc(100% - 14px) 50%,
-    calc(100% - 10px) 50%;
-  background-repeat: no-repeat;
-  background-size: 4px 4px;
-  cursor: var(--cursor-interaction, default);
-}
-
-.form-select:not(:disabled):hover {
-  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-select:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-check {
-  display: flex;
-  min-height: 20px;
-  align-items: center;
-  gap: 6px;
-}
-
-.form-check-input {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  flex: 0 0 auto;
-  margin: 0;
-  border: 1px solid var(--input);
-  color: var(--primary-foreground);
-  background-color: transparent;
-  cursor: var(--cursor-interaction, default);
-  transition:
-    background-color 150ms,
-    border-color 150ms,
-    box-shadow 150ms;
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
-  border-color: var(--input);
-  border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
-  background-color: var(--secondary);
-  box-shadow: var(--shadow-sm);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input:not(:disabled):not(:checked):hover {
-  background-color: var(--card);
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
-  border-color: var(--primary);
-  background-color: var(--primary);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--primary-foreground);
-  content: &quot;&quot;;
-  mask: var(--checkmark-image) center / 12px 12px no-repeat;
-}
-
-.form-check-input[type=&quot;radio&quot;] {
-  width: 14px;
-  height: 14px;
-  border-radius: var(--radius-full);
-}
-
-.form-check-input[type=&quot;radio&quot;]:checked {
-  border: 2px solid var(--primary);
-  background:
-    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
-    var(--primary);
-}
-
-.form-check:not(.form-switch) .form-check-input:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-.form-check:not(.form-switch) .form-check-input:disabled {
-  cursor: not-allowed;
+  opacity: 0;
+  transition: opacity 160ms ease, transform 160ms ease;
   pointer-events: none;
 }
 
-.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
+.toast[data-visible="true"] { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .controls { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 }
 
-.form-switch .form-check-input:disabled,
-.form-switch .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
-  opacity: 0.6;
+@media (max-width: 560px) {
+  .page { padding: 14px 12px 40px; }
+  .check { grid-template-columns: minmax(0, 1fr) auto; }
+  .field-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
-.form-check-label {
-  color: var(--foreground);
-  cursor: var(--cursor-interaction, default);
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 1ms !important; }
 }
 
-.form-switch .form-check-input {
-  position: relative;
-  width: 32px;
-  height: 20px;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--muted);
-  box-shadow: none;
-  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+@media print {
+  .toolbar, .toast { display: none; }
+  .page { max-width: none; padding: 0; }
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .card { break-inside: avoid; box-shadow: none; }
+  details.method { display: block; }
 }
 
-.form-switch .form-check-input::before {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-  box-shadow: var(--shadow-sm);
-  content: &quot;&quot;;
-  transform: translate(2px, -50%);
-  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
-}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div>
+      <h1>PIV acquisition feasibility calculator</h1>
+      <p class="text-muted text-small">
+        Planning tool for two-dimensional particle image velocimetry. It turns a laser,
+        camera, lens, seeding and flow description into the pulse separation you can
+        actually use, and into the scales that survive correlation. Everything is
+        computed in the browser; nothing is sent anywhere.
+      </p>
+    </div>
+    <div class="toolbar">
+      <label class="sr-only" for="preset">Preset configuration</label>
+      <select id="preset" aria-label="Preset configuration"></select>
+      <button type="button" class="btn" id="action-link" title="Copy a link that restores these inputs">Copy link</button>
+      <button type="button" class="btn" id="action-summary" title="Copy a Markdown summary of the result">Copy summary</button>
+      <button type="button" class="btn" id="action-json" title="Download inputs and results as JSON">JSON</button>
+      <button type="button" class="btn" id="action-theme" aria-pressed="false" title="Switch between light and dark">Theme</button>
+    </div>
+  </header>
 
-.form-switch .form-check-input:checked {
-  background: var(--primary);
-}
+  <noscript>
+    <p class="card mt-18">This calculator needs JavaScript: every number on the page is derived from your inputs in the browser.</p>
+  </noscript>
 
-.form-switch .form-check-input:checked::before {
-  transform: translate(14px, -50%);
-}
+  <div class="layout">
+    <form class="controls" id="controls" autocomplete="off" novalidate></form>
 
-.form-switch .form-check-input:focus-visible {
-  box-shadow: 0 0 0 2px var(--ring);
-}
+    <div class="results">
+      <div class="card verdict" id="verdict" aria-live="polite">
+        <span class="chip chip-pass" id="verdict-chip">pass</span>
+        <span class="verdict-headline" id="verdict-headline"></span>
+        <span class="verdict-detail text-small text-muted" id="verdict-detail"></span>
+      </div>
 
-.form-range {
-  appearance: none;
-  display: block;
-  width: 100%;
-  height: 28px;
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  outline: none;
-  border: 0;
-  accent-color: var(--primary);
-  background: linear-gradient(
-      color-mix(in srgb, var(--foreground) 7%, transparent),
-      color-mix(in srgb, var(--foreground) 7%, transparent)
-    )
-    center / 100% 2px no-repeat;
-}
+      <div class="card">
+        <div class="stat-grid" id="stats" aria-live="polite"></div>
+      </div>
 
-.form-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
-}
+      <figure class="chart card">
+        <h2>Pulse-separation operating window</h2>
+        <svg id="chart-window" viewBox="0 0 760 284" role="img" aria-labelledby="chart-window-title chart-window-desc">
+          <title id="chart-window-title">Usable range of pulse-pair separation</title>
+          <desc id="chart-window-desc">A logarithmic time axis showing the accuracy floor, the recommended band, the remaining margin and the region where particle pairs are lost, with the chosen separation marked.</desc>
+        </svg>
+        <div class="legend" id="legend-window"></div>
+        <figcaption>
+          Below the floor the displacement is too small to measure accurately; above the
+          ceiling particle pairs leave the window or the sheet. Useful settings live in between.
+        </figcaption>
+      </figure>
 
-.form-range::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-top: 4px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
+      <figure class="chart card">
+        <h2>What the pulse separation costs and buys</h2>
+        <svg id="chart-tradeoff" viewBox="0 0 760 260" role="img" aria-labelledby="chart-tradeoff-title chart-tradeoff-desc">
+          <title id="chart-tradeoff-title">Valid-detection merit and relative velocity uncertainty against pulse separation</title>
+          <desc id="chart-tradeoff-desc">Two curves over the same logarithmic time axis: the Keane and Adrian valid-detection figure of merit, which falls as the separation grows, and the relative velocity uncertainty, which also falls as the separation grows.</desc>
+        </svg>
+        <div class="legend" id="legend-tradeoff"></div>
+        <figcaption>
+          Lengthening the pulse separation buys precision and spends correlation
+          quality. The workable separation is where both curves are still acceptable.
+        </figcaption>
+      </figure>
 
-.form-range:focus-visible::-webkit-slider-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
+      <figure class="chart card">
+        <h2>Resolvable structures</h2>
+        <svg id="chart-map" viewBox="0 0 760 420" role="img" aria-labelledby="chart-map-title chart-map-desc">
+          <title id="chart-map-title">Structure length against convection velocity</title>
+          <desc id="chart-map-desc">A log-log map separating structures sampled fewer than two times, two to five times and at least five times as they convect past the plane, overlaid with the interrogation window width and the vector-spacing Nyquist limit.</desc>
+        </svg>
+        <div class="legend" id="legend-map"></div>
+        <figcaption>
+          Horizontal limits come from the repetition rate, vertical limits from the
+          interrogation window. A structure has to clear both to be measured.
+        </figcaption>
+      </figure>
 
-.form-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
-}
+      <section class="card">
+        <h2>Criteria</h2>
+        <div class="checks" id="checks" aria-live="polite"></div>
+      </section>
 
-.form-range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
+      <details class="method card">
+        <summary>Method, thresholds and references</summary>
+        <p class="text-small text-muted">
+          Symbols: <code>s</code> image scale in metres per pixel, <code>M</code> magnification,
+          <code>D_I</code> interrogation window in pixels, <code>D_w</code> window width in metres,
+          <code>Δz₀</code> sheet thickness, <code>U_d = U + k u′</code> and <code>W_d = W + k w′</code>
+          design velocities, <code>L</code> the structure length you want to resolve.
+        </p>
+        <dl>
+          <dt>M = p / s</dt>
+          <dd>Magnification from the pixel pitch <code>p</code> and the image scale.</dd>
+          <dt>d_diff = 2.44 f# (1 + M) λ</dt>
+          <dd>Diffraction-limited image of a point source.</dd>
+          <dt>d_τ = √((M d_p)² + d_diff²)</dt>
+          <dd>Particle-image diameter. Below about 2 px the sub-pixel peak estimator locks to integer displacements; 2–4 px minimises the random error.</dd>
+          <dt>δz = 2 f# d_diff (1 + M) / M²</dt>
+          <dd>Depth of field. When it is thinner than the light sheet, out-of-focus particles add noise instead of signal.</dd>
+          <dt>ΔX = U_d Δt / s</dt>
+          <dd>Particle-image displacement. The quarter rule keeps it below a set fraction of the window.</dd>
+          <dt>N_I F_I F_O ≥ 7</dt>
+          <dd>Valid-detection criterion of Keane &amp; Adrian: particle images per window, reduced by in-plane loss <code>F_I = 1 − ΔX / D_I</code> and out-of-plane loss <code>F_O = 1 − W_d Δt / Δz₀</code>. Window shifting or multi-pass correlation removes the in-plane term.</dd>
+          <dt>σ_U = σ_px s / Δt</dt>
+          <dd>Velocity resolution from the correlation uncertainty. It sets the accuracy floor on Δt and the dynamic velocity range <code>DVR = ΔX_max / σ_px</code>.</dd>
+          <dt>A/A₀ = |sinc(D_w / L)|</dt>
+          <dd>Amplitude of a sinusoidal structure of wavelength <code>L</code> surviving the window's top-hat average. Overlap adds vectors but not information.</dd>
+          <dt>|∂ΔX/∂x| ≤ 0.05</dt>
+          <dd>Displacement gradient across a window, estimated from <code>Δu ≈ k u′ D_w / L</code>. The classical Keane &amp; Adrian form <code>a = M |Δu| Δt / d_τ</code> is reported alongside it.</dd>
+          <dt>St = τ_p U_d / L</dt>
+          <dd>Tracer Stokes number with <code>τ_p = ρ_p d_p² / (18 μ)</code>. Settling adds a bias <code>U_g = d_p² (ρ_p − ρ_f) g / (18 μ)</code>.</dd>
+          <dt>N_t = f L / U_d</dt>
+          <dd>PIV fields acquired while the structure convects past the plane, under Taylor's frozen-turbulence hypothesis. Two is the Nyquist limit, five a conservative planning target.</dd>
+        </dl>
+        <p class="text-small text-muted mt-12">
+          Sources: R. D. Keane and R. J. Adrian, <em>Optimization of particle image
+          velocimeters</em>, Meas. Sci. Technol. 1 (1990) 1202; R. J. Adrian and J. Westerweel,
+          <em>Particle Image Velocimetry</em>, Cambridge, 2011; M. Raffel et al.,
+          <em>Particle Image Velocimetry: A Practical Guide</em>, 3rd ed., Springer, 2018;
+          J. Westerweel, <em>Fundamentals of digital particle image velocimetry</em>,
+          Meas. Sci. Technol. 8 (1997) 1379.
+        </p>
+        <ul>
+          <li>This is an acquisition-planning tool, not a guarantee that correlation will succeed. It says nothing about calibration, illumination uniformity, reflections, timing jitter or the processing algorithm.</li>
+          <li>The velocity difference across a window is estimated from the design fluctuation and the structure length; substitute your own shear estimate when you have one.</li>
+          <li>Thresholds are conventional practice, not physical laws. Where a limit is a convention rather than a bound, the criterion says so.</li>
+        </ul>
+      </details>
+    </div>
+  </div>
 
-.form-range:focus-visible::-moz-range-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<script>
+(() => {
+'use strict';
+/* ---- src/model.js ---- */
+/*
+ * PIV acquisition feasibility model.
+ *
+ * Pure functions, no DOM. Every quantity is SI unless the name says otherwise:
+ * lengths in metres, times in seconds, velocities in m/s, densities in kg/m^3,
+ * dynamic viscosity in Pa s, number densities in m^-3. Pixel quantities carry a
+ * `Px` suffix.
+ *
+ * References for the criteria implemented here are listed in README.md.
+ */
 
-.form-range:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
+const G = 9.80665;
 
-.btn:not(.btn-primary, .viz-tile):is(
-    [aria-pressed=&quot;true&quot;],
-    [aria-selected=&quot;true&quot;],
-    .is-selected
-  ) {
-  border-color: var(--primary);
-  color: var(--primary-foreground);
-  background: var(--primary);
-}
+const FLUIDS = {
+  water: { label: 'Water, 20 °C', density: 998.2, viscosity: 1.002e-3 },
+  air: { label: 'Air, 20 °C, 1 atm', density: 1.204, viscosity: 1.825e-5 },
+  custom: { label: 'Custom', density: 998.2, viscosity: 1.002e-3 }
+};
 
-.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
-  border-color: var(--primary);
-  box-shadow: inset 0 0 0 1px var(--primary);
-}
+/* Acceptance thresholds. Collected here so the whole rule set is auditable. */
+const THRESHOLDS = {
+  /* Keane & Adrian valid-detection figure of merit N_I F_I F_O. */
+  correlationPass: 7,
+  correlationMargin: 5,
+  /* Particle-image diameter in pixels: below 2 px the sub-pixel estimator
+     biases towards integer displacements (peak locking). */
+  imageDiameterPx: { fail: 1.5, margin: 2, comfortable: 4 },
+  /* Relative uncertainty of the design velocity. */
+  relativeErrorPass: 0.02,
+  relativeErrorMargin: 0.05,
+  /* Displacement gradient across the interrogation window, in pixels of
+     displacement per pixel of window. */
+  gradientPass: 0.05,
+  gradientMargin: 0.1,
+  /* Amplitude of a sinusoidal structure surviving the window's top-hat filter. */
+  attenuationPass: 0.8,
+  attenuationMargin: 0.64,
+  /* Vector samples per structure length. */
+  vectorSamplesPass: 4,
+  vectorSamplesMargin: 2,
+  /* PIV fields acquired while the structure convects past the plane. */
+  temporalSamplesPass: 5,
+  temporalSamplesMargin: 2,
+  /* Stokes number based on the structure passage time. */
+  stokesPass: 0.1,
+  stokesMargin: 0.5,
+  /* Settling velocity as a fraction of the design velocity. */
+  settlingPass: 0.01,
+  settlingMargin: 0.05,
+  /* Depth of field as a fraction of the sheet thickness. */
+  depthOfFieldPass: 1,
+  depthOfFieldMargin: 0.5
+};
 
-.btn:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
+/* Fraction of the hard retention limit used as the recommended setting. */
+const MARGIN_FACTOR = 0.8;
 
-svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
+const STATUS_RANK = { pass: 0, margin: 1, fail: 2 };
 
-#widget &gt; svg {
-  width: 100%;
-}
+const worstStatus = (statuses) =>
+  statuses.reduce((worst, s) => (STATUS_RANK[s] > STATUS_RANK[worst] ? s : worst), 'pass');
 
-.text-warning,
-.text-destructive {
-  color: var(--destructive);
-}
+/* Descending metric: larger is better. */
+const gradeHigh = (value, pass, margin) =>
+  value >= pass ? 'pass' : value >= margin ? 'margin' : 'fail';
 
-html&gt;body{padding:0}&lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div id=&quot;piv-retention-tool&quot; class=&quot;prt-root&quot;&gt;
-  &lt;div class=&quot;prt-sections&quot;&gt;
-    &lt;section&gt;
-      &lt;h3&gt;Timing and flow&lt;/h3&gt;
-      &lt;div class=&quot;viz-controls&quot;&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-rate&quot;&gt;Laser pair rate &lt;span class=&quot;text-muted&quot;&gt;Hz&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-rate&quot; type=&quot;number&quot; min=&quot;0.1&quot; max=&quot;10000&quot; step=&quot;0.1&quot; value=&quot;15&quot; data-tooltip=&quot;Number of PIV image pairs acquired per second. This sets measurement cadence, not the time between pulses within a pair.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-dt&quot;&gt;Pulse-pair separation &lt;span class=&quot;text-muted&quot;&gt;ms&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-dt&quot; type=&quot;number&quot; min=&quot;0.001&quot; max=&quot;1000&quot; step=&quot;0.01&quot; value=&quot;1.00&quot; data-tooltip=&quot;Time between the two laser pulses used for one velocity calculation. Shorten it to reduce particle displacement and sheet loss.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-mean&quot;&gt;Mean in-plane speed &lt;span class=&quot;text-muted&quot;&gt;m/s&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-mean&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;0.01&quot; value=&quot;0.50&quot; data-tooltip=&quot;Expected mean particle speed parallel to the laser sheet. Use the largest relevant speed in the field of view.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-urms&quot;&gt;In-plane RMS fluctuation &lt;span class=&quot;text-muted&quot;&gt;m/s&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-urms&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;0.01&quot; value=&quot;0.10&quot; data-tooltip=&quot;RMS turbulent velocity fluctuation parallel to the sheet. It is added to the mean using the selected design multiplier.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-k&quot;&gt;Design multiplier &lt;span class=&quot;text-muted&quot;&gt;RMS&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-k&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;10&quot; step=&quot;0.5&quot; value=&quot;3&quot; data-tooltip=&quot;Safety multiplier applied to RMS fluctuations. Three RMS is conservative when fluctuations are approximately Gaussian.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
+/* Ascending metric: smaller is better. */
+const gradeLow = (value, pass, margin) =>
+  value <= pass ? 'pass' : value <= margin ? 'margin' : 'fail';
 
-    &lt;section&gt;
-      &lt;h3&gt;Image-plane retention&lt;/h3&gt;
-      &lt;div class=&quot;viz-controls&quot;&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-fov&quot;&gt;Field-of-view width &lt;span class=&quot;text-muted&quot;&gt;mm&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-fov&quot; type=&quot;number&quot; min=&quot;0.01&quot; max=&quot;100000&quot; step=&quot;0.1&quot; value=&quot;100&quot; data-tooltip=&quot;Physical width represented by the image. Together with image width, this determines millimetres per pixel.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-pixels&quot;&gt;Image width &lt;span class=&quot;text-muted&quot;&gt;pixels&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-pixels&quot; type=&quot;number&quot; min=&quot;16&quot; max=&quot;100000&quot; step=&quot;1&quot; value=&quot;2048&quot; data-tooltip=&quot;Number of camera pixels spanning the stated field-of-view width after any cropping or binning.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-window&quot;&gt;Interrogation window &lt;span class=&quot;text-muted&quot;&gt;pixels&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-window&quot; type=&quot;number&quot; min=&quot;4&quot; max=&quot;1024&quot; step=&quot;4&quot; value=&quot;32&quot; data-tooltip=&quot;Final PIV interrogation-window width. Larger windows tolerate more displacement but reduce spatial resolution.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-shift-fraction&quot;&gt;Allowed window displacement &lt;span class=&quot;text-muted&quot;&gt;%&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-shift-fraction&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;100&quot; step=&quot;1&quot; value=&quot;25&quot; data-tooltip=&quot;Maximum particle-image displacement as a fraction of the interrogation window. Twenty-five percent is a conservative starting point.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-overlap&quot;&gt;Window overlap &lt;span class=&quot;text-muted&quot;&gt;%&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-overlap&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;95&quot; step=&quot;5&quot; value=&quot;50&quot; data-tooltip=&quot;Overlap between adjacent interrogation windows. It reduces vector spacing but does not recover spatial resolution filtered by the window size.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-structure&quot;&gt;Desired structure length &lt;span class=&quot;text-muted&quot;&gt;mm&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-structure&quot; type=&quot;number&quot; min=&quot;0.001&quot; max=&quot;100000&quot; step=&quot;0.1&quot; value=&quot;50&quot; data-tooltip=&quot;Smallest flow-structure length you want to resolve. It is checked independently against interrogation-window size, vector spacing, and temporal sampling.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
+const clampRange = (value, lo, hi) => Math.min(hi, Math.max(lo, value));
 
-    &lt;section&gt;
-      &lt;h3&gt;Laser-sheet retention&lt;/h3&gt;
-      &lt;div class=&quot;viz-controls&quot;&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-sheet&quot;&gt;Sheet thickness &lt;span class=&quot;text-muted&quot;&gt;mm&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-sheet&quot; type=&quot;number&quot; min=&quot;0.001&quot; max=&quot;1000&quot; step=&quot;0.1&quot; value=&quot;2.0&quot; data-tooltip=&quot;Effective illuminated sheet thickness at the measurement plane. Use the region with sufficient particle-image intensity, not merely the nominal optical width.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-wrms&quot;&gt;Out-of-plane RMS speed &lt;span class=&quot;text-muted&quot;&gt;mm/s&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-wrms&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;100000&quot; step=&quot;0.1&quot; value=&quot;2.0&quot; data-tooltip=&quot;RMS velocity normal to the laser sheet. This component moves particles out of the illuminated measurement plane.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;form-label&quot; for=&quot;prt-sheet-fraction&quot;&gt;Allowed sheet traversal &lt;span class=&quot;text-muted&quot;&gt;%&lt;/span&gt;
-          &lt;input class=&quot;form-control&quot; id=&quot;prt-sheet-fraction&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;100&quot; step=&quot;1&quot; value=&quot;25&quot; data-tooltip=&quot;Allowed out-of-plane travel as a fraction of sheet thickness. A smaller value preserves more common particles between images.&quot; data-tooltip-placement=&quot;top&quot;&gt;
-        &lt;/label&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
-  &lt;/div&gt;
+const finitePositive = (value, fallback) =>
+  Number.isFinite(value) && value > 0 ? value : fallback;
 
-  &lt;div class=&quot;viz-row prt-actions&quot;&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; id=&quot;prt-use-rate&quot;&gt;Use single-pulse interval&lt;/button&gt;
-    &lt;span class=&quot;text-small text-muted&quot; id=&quot;prt-cadence-note&quot;&gt;15 Hz gives one velocity field every 66.7 ms; pulse-pair separation is independent.&lt;/span&gt;
-  &lt;/div&gt;
+/* Frequencies read better with a prefix than in exponent notation. */
+const fmtHz = (v) =>
+  !Number.isFinite(v)
+    ? '—'
+    : v >= 1e6
+      ? `${(v / 1e6).toPrecision(3)} MHz`
+      : v >= 1e3
+        ? `${(v / 1e3).toPrecision(3)} kHz`
+        : `${v.toPrecision(3)} Hz`;
 
-  &lt;div class=&quot;viz-grid prt-stats&quot; aria-live=&quot;polite&quot;&gt;
-    &lt;div class=&quot;card viz-stat&quot;&gt;
-      &lt;span class=&quot;text-muted&quot;&gt;In-plane displacement&lt;/span&gt;
-      &lt;span class=&quot;viz-stat-value&quot; id=&quot;prt-shift-value&quot;&gt;16.4 px&lt;/span&gt;
-      &lt;span id=&quot;prt-shift-limit&quot;&gt;limit 8.0 px&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;card viz-stat&quot;&gt;
-      &lt;span class=&quot;text-muted&quot;&gt;Out-of-plane travel&lt;/span&gt;
-      &lt;span class=&quot;viz-stat-value&quot; id=&quot;prt-sheet-value&quot;&gt;0.006 mm&lt;/span&gt;
-      &lt;span id=&quot;prt-sheet-limit&quot;&gt;limit 0.500 mm&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;card viz-stat&quot;&gt;
-      &lt;span class=&quot;text-muted&quot;&gt;Recommended pair separation&lt;/span&gt;
-      &lt;span class=&quot;viz-stat-value&quot; id=&quot;prt-recommended&quot;&gt;≤ 0.39 ms&lt;/span&gt;
-      &lt;span id=&quot;prt-limiter&quot;&gt;limited by image displacement&lt;/span&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
+/* Ratios that round to zero should say so rather than print 0.00 %. */
+const fmtRatio = (v) =>
+  !Number.isFinite(v) ? '—' : v > 0 && v < 1e-4 ? '< 0.01 %' : `${(v * 100).toFixed(2)} %`;
 
-  &lt;svg class=&quot;prt-chart&quot; viewBox=&quot;0 0 736 250&quot; role=&quot;img&quot; aria-labelledby=&quot;prt-title prt-desc&quot;&gt;
-    &lt;title id=&quot;prt-title&quot;&gt;PIV pulse-pair separation operating range&lt;/title&gt;
-    &lt;desc id=&quot;prt-desc&quot;&gt;A logarithmic time axis compares the chosen pulse separation with image-plane and laser-sheet retention limits. The conservative zone includes a twenty percent margin.&lt;/desc&gt;
-  &lt;/svg&gt;
+/* Normalised sinc, sin(pi x)/(pi x). */
+const sinc = (x) => (x === 0 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x));
 
-  &lt;div class=&quot;card prt-result&quot; aria-live=&quot;polite&quot;&gt;
-    &lt;strong id=&quot;prt-status&quot;&gt;Reduce pulse-pair separation&lt;/strong&gt;
-    &lt;span id=&quot;prt-result-detail&quot;&gt;The current particle-image shift exceeds the configured correlation limit.&lt;/span&gt;
-  &lt;/div&gt;
+/*
+ * Default input set: a bench-top water channel. Also the shape contract for
+ * `evaluate` — every key is required.
+ */
+const DEFAULTS = {
+  /* Timing */
+  dt: 3.5e-4,
+  rate: 15,
+  /* Flow */
+  uMean: 0.5,
+  uRms: 0.1,
+  wMean: 0,
+  wRms: 0.05,
+  k: 3,
+  /* Imaging */
+  fovWidth: 0.1,
+  imageWidthPx: 2048,
+  pixelPitch: 6.5e-6,
+  fNumber: 11,
+  wavelength: 532e-9,
+  /* Light sheet */
+  sheetThickness: 2e-3,
+  /* Interrogation */
+  windowPx: 32,
+  overlap: 0.5,
+  shiftFraction: 0.25,
+  sheetFraction: 0.25,
+  windowShifting: true,
+  /* Seeding and tracers */
+  concentration: 2e9,
+  particleDiameter: 10e-6,
+  particleDensity: 1050,
+  fluidDensity: FLUIDS.water.density,
+  fluidViscosity: FLUIDS.water.viscosity,
+  /* Analysis */
+  sigmaPx: 0.1,
+  structureLength: 0.05
+};
 
-  &lt;section class=&quot;prt-sampling-section&quot;&gt;
-    &lt;h3&gt;Flow-structure sampling across successive PIV fields&lt;/h3&gt;
-    &lt;svg class=&quot;prt-sampling-chart&quot; viewBox=&quot;0 0 736 410&quot; role=&quot;img&quot; aria-labelledby=&quot;prt-sampling-title prt-sampling-desc&quot;&gt;
-      &lt;title id=&quot;prt-sampling-title&quot;&gt;Resolvable structure length and convection velocity at the selected repetition rate&lt;/title&gt;
-      &lt;desc id=&quot;prt-sampling-desc&quot;&gt;A log-log chart separates structures with fewer than two samples, two to five samples, and at least five samples as they pass through the measurement plane.&lt;/desc&gt;
-    &lt;/svg&gt;
-    &lt;div class=&quot;card prt-sampling-result&quot; aria-live=&quot;polite&quot;&gt;
-      &lt;span id=&quot;prt-frequency-limits&quot;&gt;Frequency limits: 7.5 Hz theoretical and 3.0 Hz conservative.&lt;/span&gt;
-      &lt;span id=&quot;prt-length-limits&quot;&gt;At the design velocity: 107 mm theoretical and 267 mm conservative.&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;viz-grid prt-checks&quot; aria-live=&quot;polite&quot;&gt;
-      &lt;div class=&quot;card viz-stat&quot;&gt;
-        &lt;span class=&quot;text-muted&quot;&gt;Particle-pair retention&lt;/span&gt;
-        &lt;span class=&quot;viz-stat-value&quot; id=&quot;prt-pair-check&quot;&gt;Likely loss&lt;/span&gt;
-        &lt;span id=&quot;prt-pair-context&quot;&gt;Reduce pulse-pair separation&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;card viz-stat&quot;&gt;
-        &lt;span class=&quot;text-muted&quot;&gt;Spatial structure resolution&lt;/span&gt;
-        &lt;span class=&quot;viz-stat-value&quot; id=&quot;prt-spatial-check&quot;&gt;10.0 window widths&lt;/span&gt;
-        &lt;span id=&quot;prt-spatial-context&quot;&gt;20.0 plotted vectors across structure&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;card viz-stat&quot;&gt;
-        &lt;span class=&quot;text-muted&quot;&gt;Temporal structure sampling&lt;/span&gt;
-        &lt;span class=&quot;viz-stat-value&quot; id=&quot;prt-temporal-check&quot;&gt;0.94 fields&lt;/span&gt;
-        &lt;span id=&quot;prt-temporal-context&quot;&gt;Fewer than two samples&lt;/span&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/section&gt;
-&lt;/div&gt;
-
-&lt;style&gt;
-  #piv-retention-tool { width: 100%; color: var(--foreground); }
-  #piv-retention-tool .prt-sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-  #piv-retention-tool h3 { margin: 0 0 8px; }
-  #piv-retention-tool .viz-controls { align-items: end; }
-  #piv-retention-tool .form-label { min-width: 0; flex: 1 1 150px; }
-  #piv-retention-tool .prt-actions { margin: 12px 0; align-items: center; }
-  #piv-retention-tool .prt-stats { margin-bottom: 8px; }
-  #piv-retention-tool .prt-chart { width: 100%; height: auto; display: block; overflow: visible; }
-  #piv-retention-tool .prt-grid { stroke: var(--border); stroke-width: 1; }
-  #piv-retention-tool .prt-axis { stroke: var(--muted-foreground); stroke-width: 1.25; }
-  #piv-retention-tool .prt-conservative-zone { fill: var(--viz-series-2); opacity: 0.13; }
-  #piv-retention-tool .prt-margin-zone { fill: var(--viz-series-1); opacity: 0.13; }
-  #piv-retention-tool .prt-fail-zone { fill: var(--muted); opacity: 0.45; }
-  #piv-retention-tool .prt-image-line { stroke: var(--viz-series-1); stroke-width: 3; }
-  #piv-retention-tool .prt-sheet-line { stroke: var(--viz-series-2); stroke-width: 3; stroke-dasharray: 8 5; }
-  #piv-retention-tool .prt-choice-line { stroke: var(--foreground); stroke-width: 3; }
-  #piv-retention-tool .prt-rate-line { stroke: var(--muted-foreground); stroke-width: 2; stroke-dasharray: 3 4; }
-  #piv-retention-tool .prt-tick,
-  #piv-retention-tool .prt-label,
-  #piv-retention-tool .prt-zone-label { fill: var(--foreground); font-family: inherit; font-size: var(--font-size-base); }
-  #piv-retention-tool .prt-tick { fill: var(--muted-foreground); }
-  #piv-retention-tool .prt-label { font-weight: 500; paint-order: stroke; stroke: var(--background); stroke-width: 5; stroke-linejoin: round; }
-  #piv-retention-tool .prt-zone-label { fill: var(--muted-foreground); font-weight: 500; }
-  #piv-retention-tool .prt-result { display: flex; gap: 10px; align-items: baseline; margin-top: 8px; }
-  #piv-retention-tool .prt-result strong { white-space: nowrap; }
-  #piv-retention-tool .prt-sampling-section { margin-top: 24px; }
-  #piv-retention-tool .prt-sampling-chart { width: 100%; height: auto; display: block; overflow: visible; }
-  #piv-retention-tool .prt-sampling-grid { stroke: var(--border); stroke-width: 1; }
-  #piv-retention-tool .prt-sampling-axis { stroke: var(--muted-foreground); stroke-width: 1.25; }
-  #piv-retention-tool .prt-sampling-unresolved { fill: var(--muted); opacity: 0.45; }
-  #piv-retention-tool .prt-sampling-theory-zone { fill: var(--viz-series-1); opacity: 0.13; }
-  #piv-retention-tool .prt-sampling-conservative-zone { fill: var(--viz-series-2); opacity: 0.13; }
-  #piv-retention-tool .prt-sampling-theory-line { stroke: var(--viz-series-1); stroke-width: 2.5; }
-  #piv-retention-tool .prt-sampling-conservative-line { stroke: var(--viz-series-2); stroke-width: 2.5; stroke-dasharray: 9 6; }
-  #piv-retention-tool .prt-sampling-flow-band { fill: var(--viz-series-3); opacity: 0.13; }
-  #piv-retention-tool .prt-sampling-mean-line { stroke: var(--viz-series-3); stroke-width: 2; stroke-dasharray: 4 5; }
-  #piv-retention-tool .prt-sampling-speed-line { stroke: var(--viz-series-3); stroke-width: 2.5; }
-  #piv-retention-tool .prt-sampling-structure-line { stroke: var(--foreground); stroke-width: 2.5; stroke-dasharray: 3 4; }
-  #piv-retention-tool .prt-sampling-theory-marker { fill: var(--background); stroke: var(--viz-series-1); stroke-width: 3; }
-  #piv-retention-tool .prt-sampling-conservative-marker { fill: var(--viz-series-2); stroke: var(--background); stroke-width: 2; }
-  #piv-retention-tool .prt-sampling-label,
-  #piv-retention-tool .prt-sampling-tick { fill: var(--foreground); font-family: inherit; font-size: var(--font-size-base); }
-  #piv-retention-tool .prt-sampling-tick { fill: var(--muted-foreground); }
-  #piv-retention-tool .prt-sampling-label { font-weight: 500; paint-order: stroke; stroke: var(--background); stroke-width: 5; stroke-linejoin: round; }
-  #piv-retention-tool .prt-sampling-result { display: flex; gap: 18px; justify-content: space-between; margin-top: 8px; }
-  #piv-retention-tool .prt-checks { margin-top: 10px; }
-  @media (max-width: 700px) {
-    #piv-retention-tool .prt-sections { grid-template-columns: 1fr; }
+/*
+ * Solve N_I F_I F_O = target for the pulse separation. The product is
+ * monotonically decreasing in dt over the interval where both factors are
+ * positive, so a bisection is both safe and exact enough for planning.
+ */
+function solveCorrelationDt({ ni, target, imageRate, sheetRate }) {
+  if (!(ni > 0)) return 0;
+  const merit = (dt) =>
+    ni * Math.max(0, 1 - imageRate * dt) * Math.max(0, 1 - sheetRate * dt);
+  if (merit(0) < target) return 0;
+  /* Upper bracket: the dt at which either factor reaches zero. */
+  const rates = [imageRate, sheetRate].filter((r) => r > 0);
+  if (rates.length === 0) return Infinity;
+  let hi = Math.min(...rates.map((r) => 1 / r));
+  let lo = 0;
+  for (let i = 0; i < 80; i += 1) {
+    const mid = 0.5 * (lo + hi);
+    if (merit(mid) >= target) lo = mid;
+    else hi = mid;
   }
-  @media (max-width: 520px) {
-    #piv-retention-tool .prt-result { flex-direction: column; }
-    #piv-retention-tool .prt-sampling-result { flex-direction: column; }
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    #piv-retention-tool .prt-dynamic { transition: x 180ms ease, width 180ms ease; }
-  }
-&lt;/style&gt;
+  return lo;
+}
 
-&lt;script&gt;
-(() =&gt; {
-  const root = document.getElementById(&#x27;piv-retention-tool&#x27;);
-  const svg = root.querySelector(&#x27;.prt-chart&#x27;);
-  const ns = &#x27;http://www.w3.org/2000/svg&#x27;;
-  const W = 736, H = 250;
-  const m = { top: 42, right: 28, bottom: 62, left: 72 };
-  const pw = W - m.left - m.right;
-  const ph = H - m.top - m.bottom;
-  const tMin = 0.001, tMax = 1000;
-  const sx = t =&gt; m.left + (Math.log10(Math.max(tMin, Math.min(tMax, t))) - Math.log10(tMin)) / (Math.log10(tMax) - Math.log10(tMin)) * pw;
-  const add = (name, attrs = {}, text = &#x27;&#x27;, parent = svg) =&gt; {
-    const node = document.createElementNS(ns, name);
-    Object.entries(attrs).forEach(([k, v]) =&gt; node.setAttribute(k, v));
-    if (text) node.textContent = text;
-    parent.appendChild(node);
-    return node;
+/**
+ * Evaluate one acquisition configuration.
+ *
+ * @param {typeof DEFAULTS} raw
+ * @returns {object} derived quantities, per-criterion checks and an overall verdict
+ */
+function evaluate(raw) {
+  const input = { ...DEFAULTS, ...raw };
+
+  const dt = finitePositive(input.dt, 1e-9);
+  const rate = finitePositive(input.rate, 1e-9);
+  const fovWidth = finitePositive(input.fovWidth, 1e-6);
+  const imageWidthPx = finitePositive(input.imageWidthPx, 1);
+  const pixelPitch = finitePositive(input.pixelPitch, 1e-6);
+  const fNumber = finitePositive(input.fNumber, 1);
+  const wavelength = finitePositive(input.wavelength, 1e-9);
+  const sheetThickness = finitePositive(input.sheetThickness, 1e-9);
+  const windowPx = finitePositive(input.windowPx, 1);
+  const overlap = clampRange(input.overlap, 0, 0.95);
+  const shiftFraction = clampRange(input.shiftFraction, 0.01, 1);
+  const sheetFraction = clampRange(input.sheetFraction, 0.01, 1);
+  const sigmaPx = finitePositive(input.sigmaPx, 0.01);
+  const structureLength = finitePositive(input.structureLength, 1e-9);
+  const particleDiameter = Math.max(0, input.particleDiameter);
+  const fluidViscosity = finitePositive(input.fluidViscosity, 1e-9);
+  const k = Math.max(0, input.k);
+
+  /* ---- Imaging geometry ---- */
+  const scale = fovWidth / imageWidthPx; // metres per pixel in object space
+  const magnification = pixelPitch / scale;
+  const diffractionDiameter = 2.44 * fNumber * (1 + magnification) * wavelength;
+  const imageDiameter = Math.hypot(magnification * particleDiameter, diffractionDiameter);
+  const imageDiameterPx = imageDiameter / pixelPitch;
+  const depthOfField =
+    (2 * fNumber * diffractionDiameter * (1 + magnification)) / magnification ** 2;
+
+  /* ---- Design velocities ---- */
+  const uDesign = Math.max(0, input.uMean) + k * Math.max(0, input.uRms);
+  const wDesign = Math.max(0, input.wMean) + k * Math.max(0, input.wRms);
+
+  /* ---- Displacements at the chosen dt ---- */
+  const displacementPx = (uDesign * dt) / scale;
+  const sheetTravel = wDesign * dt;
+  const allowedPx = windowPx * shiftFraction;
+  const allowedSheet = sheetThickness * sheetFraction;
+
+  /* ---- Retention limits on dt ---- */
+  const dtImage = uDesign > 0 ? (allowedPx * scale) / uDesign : Infinity;
+  const dtSheet = wDesign > 0 ? allowedSheet / wDesign : Infinity;
+
+  /* ---- Interrogation geometry ---- */
+  const windowSize = windowPx * scale;
+  const vectorSpacing = windowSize * (1 - overlap);
+  const vectorsAcross = Math.floor(imageWidthPx / (windowPx * (1 - overlap)));
+
+  /* ---- Loss-of-pairs figure of merit (Keane & Adrian) ---- */
+  const effectiveDepth = Math.min(sheetThickness, depthOfField);
+  const ni = Math.max(0, input.concentration) * windowSize ** 2 * effectiveDepth;
+  const imageLossRate = uDesign / windowSize; // dFI/dt
+  const sheetLossRate = wDesign / sheetThickness; // dFO/dt
+  const fi = input.windowShifting ? 1 : Math.max(0, 1 - imageLossRate * dt);
+  const fo = Math.max(0, 1 - sheetLossRate * dt);
+  const merit = ni * fi * fo;
+  const dtCorrelation = solveCorrelationDt({
+    ni,
+    target: THRESHOLDS.correlationPass,
+    imageRate: input.windowShifting ? 0 : imageLossRate,
+    sheetRate: sheetLossRate
+  });
+
+  /* ---- Accuracy floor on dt ---- */
+  const velocityResolution = (sigmaPx * scale) / dt; // m/s
+  const relativeError = uDesign > 0 ? velocityResolution / uDesign : Infinity;
+  const rmsResolution = input.uRms > 0 ? velocityResolution / input.uRms : Infinity;
+  const dtAccuracy =
+    uDesign > 0 ? (sigmaPx * scale) / (uDesign * THRESHOLDS.relativeErrorPass) : 0;
+  const dynamicVelocityRange = allowedPx / sigmaPx;
+
+  /* ---- Operating window ---- */
+  /* A zero from the solver means no separation reaches the merit target, which
+     is a seeding problem rather than a timing one: leave the retention ceiling
+     in place and let the valid-detection criterion report it. */
+  const dtHard = Math.min(dtImage, dtSheet, dtCorrelation || Infinity);
+  const dtRecommended = MARGIN_FACTOR * dtHard;
+  const dtFloor = dtAccuracy;
+  const limiter =
+    dtHard === dtImage
+      ? 'in-plane displacement'
+      : dtHard === dtSheet
+        ? 'out-of-plane sheet loss'
+        : 'valid-detection probability';
+  const windowConflict = dtFloor > dtRecommended;
+  const framePeriod = 1 / rate;
+
+  /* ---- Spatial resolution ---- */
+  const attenuation = Math.abs(sinc(windowSize / structureLength));
+  const windowsAcross = structureLength / windowSize;
+  const vectorSamples = structureLength / vectorSpacing;
+
+  /* ---- Velocity gradient across a window ----
+     The velocity difference sampled by one window is estimated from the design
+     fluctuation spread over the structure, Δu ≈ k u′ D_w / L. The practical
+     criterion is the displacement gradient in pixels per pixel; the classical
+     Keane & Adrian parameter a = M |Δu| Δt / d_τ is reported alongside it. */
+  const velocityDifference = k * Math.max(0, input.uRms) * Math.min(1, windowSize / structureLength);
+  const gradientDisplacementPx = (velocityDifference * dt) / scale;
+  const gradient = gradientDisplacementPx / windowPx;
+  const gradientOverImage =
+    imageDiameterPx > 0 ? gradientDisplacementPx / imageDiameterPx : Infinity;
+
+  /* ---- Tracer fidelity ---- */
+  const responseTime =
+    (Math.max(0, input.particleDensity) * particleDiameter ** 2) / (18 * fluidViscosity);
+  const structureTime = uDesign > 0 ? structureLength / uDesign : Infinity;
+  const stokes = Number.isFinite(structureTime) && structureTime > 0
+    ? responseTime / structureTime
+    : 0;
+  const responseFrequency = responseTime > 0 ? 1 / (2 * Math.PI * responseTime) : Infinity;
+  const settlingVelocity =
+    (particleDiameter ** 2 * (input.particleDensity - input.fluidDensity) * G) /
+    (18 * fluidViscosity);
+  const settlingRatio = uDesign > 0 ? Math.abs(settlingVelocity) / uDesign : Infinity;
+
+  /* ---- Temporal sampling ---- */
+  const temporalSamples = uDesign > 0 ? (rate * structureLength) / uDesign : Infinity;
+  const convectionFrequency = uDesign > 0 ? uDesign / structureLength : 0;
+  const theoreticalLength = (2 * uDesign) / rate;
+  const conservativeLength = (5 * uDesign) / rate;
+
+  /* Retention only degrades as dt grows; a short dt is an accuracy problem, and
+     that is reported by its own criterion. */
+  const pairStatus = dt <= dtRecommended ? 'pass' : dt <= dtHard ? 'margin' : 'fail';
+
+  const checks = [
+    {
+      id: 'pair',
+      group: 'timing',
+      label: 'Particle-pair retention',
+      value: `${displacementPx.toFixed(1)} px shift`,
+      detail: `limit ${allowedPx.toFixed(1)} px; sheet travel ${(sheetTravel * 1e3).toFixed(3)} of ${(allowedSheet * 1e3).toFixed(3)} mm`,
+      status: pairStatus,
+      formula: 'ΔX = U_d Δt / s ≤ f_s D_I,  Δz = W_d Δt ≤ f_z Δz₀'
+    },
+    {
+      id: 'correlation',
+      group: 'timing',
+      label: 'Valid-detection merit',
+      value: `N_I F_I F_O = ${merit.toFixed(1)}`,
+      detail: `N_I = ${ni.toFixed(1)} images per window, F_I = ${fi.toFixed(2)}, F_O = ${fo.toFixed(2)}; target ≥ ${THRESHOLDS.correlationPass}`,
+      status: gradeHigh(merit, THRESHOLDS.correlationPass, THRESHOLDS.correlationMargin),
+      formula: 'N_I F_I F_O ≥ 7 (Keane & Adrian)'
+    },
+    {
+      id: 'accuracy',
+      group: 'timing',
+      label: 'Velocity uncertainty',
+      value: `${fmtRatio(relativeError)} of U_d`,
+      detail: `σ_U = ${velocityResolution.toPrecision(3)} m/s = ${(rmsResolution * 100).toFixed(1)} % of u′; DVR ≈ ${dynamicVelocityRange.toFixed(0)}:1`,
+      status: gradeLow(
+        relativeError,
+        THRESHOLDS.relativeErrorPass,
+        THRESHOLDS.relativeErrorMargin
+      ),
+      formula: 'σ_U = σ_px · s / Δt'
+    },
+    {
+      id: 'frame',
+      group: 'timing',
+      label: 'Pulse pair within frame period',
+      value: `Δt / T = ${(dt / framePeriod).toFixed(3)}`,
+      detail: `frame period ${(framePeriod * 1e3).toPrecision(3)} ms at ${fmtHz(rate)}`,
+      status: gradeLow(dt / framePeriod, 0.5, 1),
+      formula: 'Δt < 1 / f'
+    },
+    {
+      id: 'particleImage',
+      group: 'imaging',
+      label: 'Particle-image diameter',
+      value: `${imageDiameterPx.toFixed(2)} px`,
+      detail:
+        imageDiameterPx < THRESHOLDS.imageDiameterPx.margin
+          ? 'below 2 px: peak locking biases sub-pixel estimates'
+          : imageDiameterPx > THRESHOLDS.imageDiameterPx.comfortable
+            ? 'above 4 px: accuracy and resolution are being spent on blur'
+            : 'in the 2–4 px band that minimises sub-pixel error',
+      status:
+        imageDiameterPx < THRESHOLDS.imageDiameterPx.fail
+          ? 'fail'
+          : imageDiameterPx < THRESHOLDS.imageDiameterPx.margin ||
+              imageDiameterPx > THRESHOLDS.imageDiameterPx.comfortable
+            ? 'margin'
+            : 'pass',
+      formula: 'd_τ = √((M d_p)² + d_diff²),  d_diff = 2.44 f# (1+M) λ'
+    },
+    {
+      id: 'depthOfField',
+      group: 'imaging',
+      label: 'Depth of field vs sheet',
+      value: `${(depthOfField / sheetThickness).toFixed(2)} × sheet`,
+      detail: `δz = ${(depthOfField * 1e3).toFixed(2)} mm at f/${fNumber.toPrecision(3)}, M = ${magnification.toPrecision(3)}`,
+      status: gradeHigh(
+        depthOfField / sheetThickness,
+        THRESHOLDS.depthOfFieldPass,
+        THRESHOLDS.depthOfFieldMargin
+      ),
+      formula: 'δz = 2 f# d_diff (1+M) / M²'
+    },
+    {
+      id: 'gradient',
+      group: 'imaging',
+      label: 'Displacement gradient',
+      value: `${gradient.toFixed(3)} px/px`,
+      detail: `displacement varies by ${gradientDisplacementPx.toFixed(2)} px across a window, ${gradientOverImage.toFixed(2)} × d_τ; target ≤ ${THRESHOLDS.gradientPass}`,
+      status: gradeLow(gradient, THRESHOLDS.gradientPass, THRESHOLDS.gradientMargin),
+      formula: '|∂ΔX/∂x| = k u′ Δt / L ≤ 0.05'
+    },
+    {
+      id: 'spatial',
+      group: 'resolution',
+      label: 'Structure amplitude retained',
+      value: `${(attenuation * 100).toFixed(0)} %`,
+      detail:
+        windowsAcross >= 1
+          ? `window ${(windowSize * 1e3).toPrecision(3)} mm = L/${windowsAcross.toPrecision(2)}; top-hat filter at this wavelength`
+          : `window ${(windowSize * 1e3).toPrecision(3)} mm is wider than the structure: it averages the feature away`,
+      status: gradeHigh(
+        attenuation,
+        THRESHOLDS.attenuationPass,
+        THRESHOLDS.attenuationMargin
+      ),
+      formula: 'A/A₀ = |sinc(D_w / L)|'
+    },
+    {
+      id: 'sampling',
+      group: 'resolution',
+      label: 'Vectors across structure',
+      value: `${vectorSamples.toFixed(1)}`,
+      detail: `spacing ${(vectorSpacing * 1e3).toFixed(2)} mm; ${vectorsAcross} vectors across the image`,
+      status: gradeHigh(
+        vectorSamples,
+        THRESHOLDS.vectorSamplesPass,
+        THRESHOLDS.vectorSamplesMargin
+      ),
+      formula: 'N_v = L / [D_w (1 − overlap)]'
+    },
+    {
+      id: 'temporal',
+      group: 'resolution',
+      label: 'Fields per structure',
+      value: Number.isFinite(temporalSamples) ? `${temporalSamples.toFixed(2)}` : '∞',
+      detail: `convection frequency ${fmtHz(convectionFrequency)}; Nyquist needs ${fmtHz(2 * convectionFrequency)}`,
+      status: gradeHigh(
+        temporalSamples,
+        THRESHOLDS.temporalSamplesPass,
+        THRESHOLDS.temporalSamplesMargin
+      ),
+      formula: 'N_t = f L / U_d'
+    },
+    {
+      id: 'stokes',
+      group: 'tracer',
+      label: 'Tracer Stokes number',
+      value: `St = ${stokes.toPrecision(2)}`,
+      detail: `τ_p = ${responseTime.toPrecision(3)} s; flat response to ≈ ${fmtHz(responseFrequency)}`,
+      status: gradeLow(stokes, THRESHOLDS.stokesPass, THRESHOLDS.stokesMargin),
+      formula: 'St = τ_p U_d / L,  τ_p = ρ_p d_p² / (18 μ)'
+    },
+    {
+      id: 'settling',
+      group: 'tracer',
+      label: 'Settling bias',
+      value: `${fmtRatio(settlingRatio)} of U_d`,
+      detail: `U_g = ${Math.abs(settlingVelocity).toPrecision(3)} m/s`,
+      status: gradeLow(settlingRatio, THRESHOLDS.settlingPass, THRESHOLDS.settlingMargin),
+      formula: 'U_g = d_p² (ρ_p − ρ_f) g / (18 μ)'
+    }
+  ];
+
+  const verdict = worstStatus(checks.map((c) => c.status));
+
+  return {
+    input,
+    verdict,
+    checks,
+    imaging: {
+      scale,
+      magnification,
+      diffractionDiameter,
+      imageDiameter,
+      imageDiameterPx,
+      depthOfField,
+      effectiveDepth,
+      fovWidth
+    },
+    flow: { uDesign, wDesign, velocityDifference },
+    displacement: {
+      displacementPx,
+      allowedPx,
+      sheetTravel,
+      allowedSheet,
+      velocityResolution,
+      relativeError,
+      rmsResolution,
+      dynamicVelocityRange
+    },
+    correlation: { ni, fi, fo, merit, imageLossRate, sheetLossRate },
+    interrogation: { windowSize, vectorSpacing, vectorsAcross, attenuation, windowsAcross, vectorSamples },
+    gradient: { value: gradient, overImageDiameter: gradientOverImage, displacementPx: gradientDisplacementPx },
+    tracer: { responseTime, responseFrequency, stokes, settlingVelocity, settlingRatio },
+    timing: {
+      dt,
+      dtImage,
+      dtSheet,
+      dtCorrelation,
+      dtHard,
+      dtRecommended,
+      dtFloor,
+      limiter,
+      windowConflict,
+      framePeriod,
+      pairStatus
+    },
+    temporal: {
+      temporalSamples,
+      convectionFrequency,
+      theoreticalLength,
+      conservativeLength,
+      theoreticalFrequency: rate / 2,
+      conservativeFrequency: rate / 5
+    }
   };
-  const val = id =&gt; Math.max(0, Number(root.querySelector(`#${id}`).value) || 0);
-  const fmtMs = ms =&gt; ms &lt; 0.01 ? `${(ms * 1000).toFixed(1)} µs` : ms &lt; 1 ? `${ms.toFixed(3)} ms` : ms &lt; 100 ? `${ms.toFixed(2)} ms` : `${ms.toFixed(1)} ms`;
-  const fmtLength = metres =&gt; metres &lt; 0.001 ? `${(metres * 1e6).toFixed(0)} µm` : metres &lt; 1 ? `${(metres * 1000).toFixed(metres &lt; 0.01 ? 1 : 0)} mm` : `${metres.toFixed(2)} m`;
+}
 
-  const defs = add(&#x27;defs&#x27;);
-  const clip = add(&#x27;clipPath&#x27;, { id: &#x27;prt-clip&#x27; }, &#x27;&#x27;, defs);
-  add(&#x27;rect&#x27;, { x: m.left, y: m.top, width: pw, height: ph }, &#x27;&#x27;, clip);
-  const zones = add(&#x27;g&#x27;, { &#x27;clip-path&#x27;: &#x27;url(#prt-clip)&#x27; });
-  const dynamic = add(&#x27;g&#x27;, { &#x27;clip-path&#x27;: &#x27;url(#prt-clip)&#x27; });
-  const labels = add(&#x27;g&#x27;);
-  const ticks = [0.001, 0.01, 0.1, 1, 10, 100, 1000];
-  const tickLabels = [&#x27;1 µs&#x27;, &#x27;10 µs&#x27;, &#x27;0.1 ms&#x27;, &#x27;1 ms&#x27;, &#x27;10 ms&#x27;, &#x27;100 ms&#x27;, &#x27;1 s&#x27;];
-  ticks.forEach((t, i) =&gt; {
-    const x = sx(t);
-    add(&#x27;line&#x27;, { x1: x, y1: m.top, x2: x, y2: m.top + ph, class: &#x27;prt-grid&#x27; });
-    add(&#x27;text&#x27;, { x, y: m.top + ph + 28, &#x27;text-anchor&#x27;: &#x27;middle&#x27;, class: &#x27;prt-tick&#x27; }, tickLabels[i]);
-  });
-  add(&#x27;line&#x27;, { x1: m.left, y1: m.top + ph, x2: m.left + pw, y2: m.top + ph, class: &#x27;prt-axis&#x27; });
-  add(&#x27;text&#x27;, { x: m.left + pw / 2, y: H - 12, &#x27;text-anchor&#x27;: &#x27;middle&#x27;, class: &#x27;prt-label&#x27; }, &#x27;Pulse-pair separation, Δt&#x27;);
-
-  const samplingSvg = root.querySelector(&#x27;.prt-sampling-chart&#x27;);
-  const SW = 736, SH = 410;
-  const sm = { top: 30, right: 28, bottom: 72, left: 92 };
-  const spw = SW - sm.left - sm.right;
-  const sph = SH - sm.top - sm.bottom;
-  const slMin = 1e-4, slMax = 2;
-  const suMin = 1e-3, suMax = 10;
-  const ssx = length =&gt; sm.left + (Math.log10(Math.max(slMin, Math.min(slMax, length))) - Math.log10(slMin)) / (Math.log10(slMax) - Math.log10(slMin)) * spw;
-  const ssy = speed =&gt; sm.top + sph - (Math.log10(Math.max(suMin, Math.min(suMax, speed))) - Math.log10(suMin)) / (Math.log10(suMax) - Math.log10(suMin)) * sph;
-  const sClampX = x =&gt; Math.max(sm.left, Math.min(sm.left + spw, x));
-  const samplingDefs = add(&#x27;defs&#x27;, {}, &#x27;&#x27;, samplingSvg);
-  const samplingClip = add(&#x27;clipPath&#x27;, { id: &#x27;prt-sampling-clip&#x27; }, &#x27;&#x27;, samplingDefs);
-  add(&#x27;rect&#x27;, { x: sm.left, y: sm.top, width: spw, height: sph }, &#x27;&#x27;, samplingClip);
-  const samplingDynamic = add(&#x27;g&#x27;, { &#x27;clip-path&#x27;: &#x27;url(#prt-sampling-clip)&#x27; }, &#x27;&#x27;, samplingSvg);
-  const samplingXTicks = [1e-4, 1e-3, 1e-2, 1e-1, 1];
-  const samplingXLabels = [&#x27;0.1 mm&#x27;, &#x27;1 mm&#x27;, &#x27;1 cm&#x27;, &#x27;10 cm&#x27;, &#x27;1 m&#x27;];
-  const samplingYTicks = [1e-3, 1e-2, 1e-1, 1, 10];
-  const samplingYLabels = [&#x27;1 mm/s&#x27;, &#x27;1 cm/s&#x27;, &#x27;0.1 m/s&#x27;, &#x27;1 m/s&#x27;, &#x27;10 m/s&#x27;];
-  samplingXTicks.forEach((value, i) =&gt; {
-    const x = ssx(value);
-    add(&#x27;line&#x27;, { x1: x, y1: sm.top, x2: x, y2: sm.top + sph, class: &#x27;prt-sampling-grid&#x27; }, &#x27;&#x27;, samplingSvg);
-    add(&#x27;text&#x27;, { x, y: sm.top + sph + 29, &#x27;text-anchor&#x27;: &#x27;middle&#x27;, class: &#x27;prt-sampling-tick&#x27; }, samplingXLabels[i], samplingSvg);
-  });
-  samplingYTicks.forEach((value, i) =&gt; {
-    const y = ssy(value);
-    add(&#x27;line&#x27;, { x1: sm.left, y1: y, x2: sm.left + spw, y2: y, class: &#x27;prt-sampling-grid&#x27; }, &#x27;&#x27;, samplingSvg);
-    add(&#x27;text&#x27;, { x: sm.left - 14, y: y + 5, &#x27;text-anchor&#x27;: &#x27;end&#x27;, class: &#x27;prt-sampling-tick&#x27; }, samplingYLabels[i], samplingSvg);
-  });
-  add(&#x27;line&#x27;, { x1: sm.left, y1: sm.top + sph, x2: sm.left + spw, y2: sm.top + sph, class: &#x27;prt-sampling-axis&#x27; }, &#x27;&#x27;, samplingSvg);
-  add(&#x27;line&#x27;, { x1: sm.left, y1: sm.top, x2: sm.left, y2: sm.top + sph, class: &#x27;prt-sampling-axis&#x27; }, &#x27;&#x27;, samplingSvg);
-  add(&#x27;text&#x27;, { x: sm.left + spw / 2, y: SH - 14, &#x27;text-anchor&#x27;: &#x27;middle&#x27;, class: &#x27;prt-sampling-label&#x27; }, &#x27;Streamwise structure length, L&#x27;, samplingSvg);
-  add(&#x27;text&#x27;, { x: 22, y: sm.top + sph / 2, transform: `rotate(-90 22 ${sm.top + sph / 2})`, &#x27;text-anchor&#x27;: &#x27;middle&#x27;, class: &#x27;prt-sampling-label&#x27; }, &#x27;Convection velocity, Uc&#x27;, samplingSvg);
-  const samplingLabels = add(&#x27;g&#x27;, {}, &#x27;&#x27;, samplingSvg);
-
-  const updateSampling = (rate, mean, urms, k, designU, structureM) =&gt; {
-    while (samplingDynamic.firstChild) samplingDynamic.removeChild(samplingDynamic.firstChild);
-    while (samplingLabels.firstChild) samplingLabels.removeChild(samplingLabels.firstChild);
-    const left = sm.left, right = sm.left + spw, top = sm.top, bottom = sm.top + sph;
-    const theoryTop = sClampX(ssx(2 * suMax / rate));
-    const theoryBottom = sClampX(ssx(2 * suMin / rate));
-    const conservativeTop = sClampX(ssx(5 * suMax / rate));
-    const conservativeBottom = sClampX(ssx(5 * suMin / rate));
-    add(&#x27;polygon&#x27;, { points: `${left},${top} ${theoryTop},${top} ${theoryBottom},${bottom} ${left},${bottom}`, class: &#x27;prt-sampling-unresolved&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;polygon&#x27;, { points: `${theoryTop},${top} ${conservativeTop},${top} ${conservativeBottom},${bottom} ${theoryBottom},${bottom}`, class: &#x27;prt-sampling-theory-zone&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;polygon&#x27;, { points: `${conservativeTop},${top} ${right},${top} ${right},${bottom} ${conservativeBottom},${bottom}`, class: &#x27;prt-sampling-conservative-zone&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;line&#x27;, { x1: theoryBottom, y1: bottom, x2: theoryTop, y2: top, class: &#x27;prt-sampling-theory-line&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;line&#x27;, { x1: conservativeBottom, y1: bottom, x2: conservativeTop, y2: top, class: &#x27;prt-sampling-conservative-line&#x27; }, &#x27;&#x27;, samplingDynamic);
-
-    const lowU = Math.max(suMin, mean - k * urms);
-    const highU = Math.min(suMax, Math.max(suMin, mean + k * urms));
-    const shownMeanU = Math.min(suMax, Math.max(suMin, mean));
-    const shownDesignU = Math.min(suMax, Math.max(suMin, designU));
-    add(&#x27;rect&#x27;, { x: left, y: ssy(highU), width: spw, height: Math.max(1, ssy(lowU) - ssy(highU)), class: &#x27;prt-sampling-flow-band&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;line&#x27;, { x1: left, y1: ssy(shownMeanU), x2: right, y2: ssy(shownMeanU), class: &#x27;prt-sampling-mean-line&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;line&#x27;, { x1: left, y1: ssy(shownDesignU), x2: right, y2: ssy(shownDesignU), class: &#x27;prt-sampling-speed-line&#x27; }, &#x27;&#x27;, samplingDynamic);
-
-    const theoryLength = 2 * designU / rate;
-    const conservativeLength = 5 * designU / rate;
-    add(&#x27;circle&#x27;, { cx: sClampX(ssx(theoryLength)), cy: ssy(shownDesignU), r: 7, class: &#x27;prt-sampling-theory-marker&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;circle&#x27;, { cx: sClampX(ssx(conservativeLength)), cy: ssy(shownDesignU), r: 7, class: &#x27;prt-sampling-conservative-marker&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;text&#x27;, { x: left + 9, y: ssy(shownDesignU) - 10, class: &#x27;prt-sampling-label&#x27; }, `Mean + ${k.toFixed(k % 1 ? 1 : 0)} RMS = ${designU.toFixed(3)} m/s`, samplingLabels);
-    add(&#x27;text&#x27;, { x: right - 9, y: ssy(shownMeanU) + 20, &#x27;text-anchor&#x27;: &#x27;end&#x27;, class: &#x27;prt-sampling-label&#x27; }, `Mean = ${mean.toFixed(3)} m/s`, samplingLabels);
-    const structureX = sClampX(ssx(structureM));
-    add(&#x27;line&#x27;, { x1: structureX, y1: top, x2: structureX, y2: bottom, class: &#x27;prt-sampling-structure-line&#x27; }, &#x27;&#x27;, samplingDynamic);
-    add(&#x27;text&#x27;, { x: structureX, y: bottom - 10, &#x27;text-anchor&#x27;: structureX &gt; left + spw * 0.75 ? &#x27;end&#x27; : &#x27;start&#x27;, class: &#x27;prt-sampling-label&#x27; }, ` Desired L = ${fmtLength(structureM)}`, samplingLabels);
-
-    const zoneY = top + 24;
-    const zoneLabels = [
-      [left, theoryTop, &#x27;Unresolved&#x27;],
-      [theoryTop, conservativeTop, &#x27;2–5 samples&#x27;],
-      [conservativeTop, right, &#x27;≥5 samples&#x27;]
-    ];
-    zoneLabels.forEach(([start, end, text]) =&gt; {
-      if (end - start &gt; 72) add(&#x27;text&#x27;, { x: (start + end) / 2, y: zoneY, &#x27;text-anchor&#x27;: &#x27;middle&#x27;, class: &#x27;prt-sampling-label&#x27; }, text, samplingLabels);
+/*
+ * Curves for the trade-off chart: how the valid-detection merit and the
+ * relative velocity uncertainty vary with the pulse separation.
+ */
+function sweepDt(result, { min, max, samples = 120 }) {
+  const { correlation, input, imaging, flow, displacement } = result;
+  const logMin = Math.log10(min);
+  const logMax = Math.log10(max);
+  const points = [];
+  for (let i = 0; i < samples; i += 1) {
+    const dt = 10 ** (logMin + ((logMax - logMin) * i) / (samples - 1));
+    const fi = input.windowShifting
+      ? 1
+      : Math.max(0, 1 - correlation.imageLossRate * dt);
+    const fo = Math.max(0, 1 - correlation.sheetLossRate * dt);
+    points.push({
+      dt,
+      merit: correlation.ni * fi * fo,
+      relativeError:
+        flow.uDesign > 0
+          ? (input.sigmaPx * imaging.scale) / (dt * flow.uDesign)
+          : Infinity,
+      displacementPx: (flow.uDesign * dt) / imaging.scale
     });
-
-    root.querySelector(&#x27;#prt-frequency-limits&#x27;).textContent = `Frequency limits: ${(rate / 2).toFixed(2)} Hz theoretical and ${(rate / 5).toFixed(2)} Hz conservative.`;
-    root.querySelector(&#x27;#prt-length-limits&#x27;).textContent = `At mean + ${k.toFixed(k % 1 ? 1 : 0)} RMS: ${fmtLength(theoryLength)} theoretical and ${fmtLength(conservativeLength)} conservative.`;
-  };
-
-  const controls = Array.from(root.querySelectorAll(&#x27;input&#x27;));
-  const useRate = root.querySelector(&#x27;#prt-use-rate&#x27;);
-  const update = () =&gt; {
-    const rate = Math.max(val(&#x27;prt-rate&#x27;), 1e-9);
-    const dt = Math.max(val(&#x27;prt-dt&#x27;), tMin);
-    const mean = val(&#x27;prt-mean&#x27;);
-    const urms = val(&#x27;prt-urms&#x27;);
-    const k = val(&#x27;prt-k&#x27;);
-    const fov = Math.max(val(&#x27;prt-fov&#x27;), 1e-9);
-    const pixels = Math.max(val(&#x27;prt-pixels&#x27;), 1);
-    const windowPx = Math.max(val(&#x27;prt-window&#x27;), 1);
-    const shiftFraction = val(&#x27;prt-shift-fraction&#x27;) / 100;
-    const sheet = Math.max(val(&#x27;prt-sheet&#x27;), 1e-9);
-    const wrms = val(&#x27;prt-wrms&#x27;);
-    const sheetFraction = val(&#x27;prt-sheet-fraction&#x27;) / 100;
-    const overlap = Math.min(0.99, val(&#x27;prt-overlap&#x27;) / 100);
-    const structureMm = Math.max(val(&#x27;prt-structure&#x27;), 1e-9);
-
-    const designU = mean + k * urms;
-    const scale = fov / pixels;
-    const allowedPx = windowPx * shiftFraction;
-    const actualPx = designU * dt / scale;
-    const dtImage = designU &gt; 0 ? allowedPx * scale / designU : tMax;
-    const designW = k * wrms;
-    const allowedSheet = sheet * sheetFraction;
-    const actualSheet = designW * dt / 1000;
-    const dtSheet = designW &gt; 0 ? 1000 * allowedSheet / designW : tMax;
-    const hardLimit = Math.min(dtImage, dtSheet);
-    const recommended = 0.8 * hardLimit;
-    const rateInterval = 1000 / rate;
-    const limiter = dtImage &lt;= dtSheet ? &#x27;image displacement&#x27; : &#x27;sheet loss&#x27;;
-    const status = dt &lt;= recommended ? &#x27;pass&#x27; : dt &lt;= hardLimit ? &#x27;margin&#x27; : &#x27;fail&#x27;;
-    const windowMm = windowPx * scale;
-    const vectorSpacingMm = windowMm * (1 - overlap);
-    const independentWidths = structureMm / windowMm;
-    const vectorSamples = structureMm / vectorSpacingMm;
-    const temporalSamples = designU &gt; 0 ? rate * (structureMm / 1000) / designU : Infinity;
-    const spatialStatus = independentWidths &gt;= 3 &amp;&amp; vectorSamples &gt;= 5 ? &#x27;pass&#x27; : independentWidths &gt;= 2 &amp;&amp; vectorSamples &gt;= 3 ? &#x27;margin&#x27; : &#x27;fail&#x27;;
-    const temporalStatus = temporalSamples &gt;= 5 ? &#x27;pass&#x27; : temporalSamples &gt;= 2 ? &#x27;margin&#x27; : &#x27;fail&#x27;;
-
-    root.querySelector(&#x27;#prt-shift-value&#x27;).textContent = `${actualPx.toFixed(1)} px`;
-    root.querySelector(&#x27;#prt-shift-limit&#x27;).textContent = `configured limit ${allowedPx.toFixed(1)} px`;
-    root.querySelector(&#x27;#prt-sheet-value&#x27;).textContent = `${actualSheet.toFixed(actualSheet &lt; 0.01 ? 4 : 3)} mm`;
-    root.querySelector(&#x27;#prt-sheet-limit&#x27;).textContent = `configured limit ${allowedSheet.toFixed(3)} mm`;
-    root.querySelector(&#x27;#prt-recommended&#x27;).textContent = `≤ ${fmtMs(recommended)}`;
-    root.querySelector(&#x27;#prt-limiter&#x27;).textContent = `limited by ${limiter}`;
-    root.querySelector(&#x27;#prt-cadence-note&#x27;).textContent = `${rate.toFixed(1)} Hz gives one velocity field every ${fmtMs(rateInterval)}; pulse-pair separation is independent.`;
-
-    const statusEl = root.querySelector(&#x27;#prt-status&#x27;);
-    const detailEl = root.querySelector(&#x27;#prt-result-detail&#x27;);
-    if (status === &#x27;pass&#x27;) {
-      statusEl.textContent = &#x27;Settings are within the conservative region&#x27;;
-      detailEl.textContent = `Design velocities: ${designU.toFixed(3)} m/s in-plane and ${designW.toFixed(1)} mm/s out-of-plane.`;
-    } else if (status === &#x27;margin&#x27;) {
-      statusEl.textContent = &#x27;Settings have little correlation margin&#x27;;
-      detailEl.textContent = `Reduce Δt to ${fmtMs(recommended)} or less; the configured ${limiter} threshold is reached at ${fmtMs(hardLimit)}.`;
-    } else {
-      statusEl.textContent = &#x27;Particle-pair loss is likely&#x27;;
-      detailEl.textContent = `Reduce Δt below ${fmtMs(hardLimit)}; a conservative target is ${fmtMs(recommended)} or less.`;
-    }
-
-    root.querySelector(&#x27;#prt-pair-check&#x27;).textContent = status === &#x27;pass&#x27; ? &#x27;Conservative&#x27; : status === &#x27;margin&#x27; ? &#x27;Limited margin&#x27; : &#x27;Likely loss&#x27;;
-    root.querySelector(&#x27;#prt-pair-context&#x27;).textContent = status === &#x27;pass&#x27; ? &#x27;Both retention limits pass&#x27; : status === &#x27;margin&#x27; ? `Reduce Δt toward ${fmtMs(recommended)}` : `${limiter} limit exceeded`;
-    root.querySelector(&#x27;#prt-spatial-check&#x27;).textContent = `${independentWidths.toFixed(1)} window widths`;
-    root.querySelector(&#x27;#prt-spatial-context&#x27;).textContent = `${vectorSamples.toFixed(1)} plotted vectors — ${spatialStatus === &#x27;pass&#x27; ? &#x27;conservative&#x27; : spatialStatus === &#x27;margin&#x27; ? &#x27;theoretical&#x27; : &#x27;insufficient&#x27;}`;
-    root.querySelector(&#x27;#prt-temporal-check&#x27;).textContent = Number.isFinite(temporalSamples) ? `${temporalSamples.toFixed(2)} fields` : &#x27;No advection limit&#x27;;
-    root.querySelector(&#x27;#prt-temporal-context&#x27;).textContent = temporalStatus === &#x27;pass&#x27; ? &#x27;At least five samples&#x27; : temporalStatus === &#x27;margin&#x27; ? &#x27;Two to five samples&#x27; : &#x27;Fewer than two samples&#x27;;
-
-    while (zones.firstChild) zones.removeChild(zones.firstChild);
-    while (dynamic.firstChild) dynamic.removeChild(dynamic.firstChild);
-    while (labels.firstChild) labels.removeChild(labels.firstChild);
-    const xRec = sx(recommended);
-    const xHard = sx(hardLimit);
-    add(&#x27;rect&#x27;, { x: m.left, y: m.top, width: Math.max(0, xRec - m.left), height: ph, class: &#x27;prt-conservative-zone prt-dynamic&#x27; }, &#x27;&#x27;, zones);
-    add(&#x27;rect&#x27;, { x: xRec, y: m.top, width: Math.max(0, xHard - xRec), height: ph, class: &#x27;prt-margin-zone prt-dynamic&#x27; }, &#x27;&#x27;, zones);
-    add(&#x27;rect&#x27;, { x: xHard, y: m.top, width: Math.max(0, m.left + pw - xHard), height: ph, class: &#x27;prt-fail-zone prt-dynamic&#x27; }, &#x27;&#x27;, zones);
-
-    const xImage = sx(dtImage);
-    const xSheet = sx(dtSheet);
-    const xChoice = sx(dt);
-    const xRate = sx(rateInterval);
-    add(&#x27;line&#x27;, { x1: xImage, y1: m.top, x2: xImage, y2: m.top + ph, class: &#x27;prt-image-line prt-dynamic&#x27; }, &#x27;&#x27;, dynamic);
-    add(&#x27;line&#x27;, { x1: xSheet, y1: m.top, x2: xSheet, y2: m.top + ph, class: &#x27;prt-sheet-line prt-dynamic&#x27; }, &#x27;&#x27;, dynamic);
-    add(&#x27;line&#x27;, { x1: xRate, y1: m.top, x2: xRate, y2: m.top + ph, class: &#x27;prt-rate-line prt-dynamic&#x27; }, &#x27;&#x27;, dynamic);
-    add(&#x27;line&#x27;, { x1: xChoice, y1: m.top, x2: xChoice, y2: m.top + ph, class: &#x27;prt-choice-line prt-dynamic&#x27; }, &#x27;&#x27;, dynamic);
-
-    add(&#x27;text&#x27;, { x: m.left + 10, y: m.top + 24, class: &#x27;prt-zone-label&#x27; }, &#x27;Conservative&#x27;, labels);
-    add(&#x27;text&#x27;, { x: xChoice, y: m.top - 20, &#x27;text-anchor&#x27;: &#x27;middle&#x27;, class: &#x27;prt-label&#x27; }, `Chosen ${fmtMs(dt)}`, labels);
-    add(&#x27;text&#x27;, { x: xImage, y: m.top + ph - 42, &#x27;text-anchor&#x27;: xImage &gt; m.left + pw * 0.75 ? &#x27;end&#x27; : &#x27;start&#x27;, class: &#x27;prt-label&#x27; }, ` Image limit ${fmtMs(dtImage)}`, labels);
-    add(&#x27;text&#x27;, { x: xSheet, y: m.top + ph - 17, &#x27;text-anchor&#x27;: xSheet &gt; m.left + pw * 0.75 ? &#x27;end&#x27; : &#x27;start&#x27;, class: &#x27;prt-label&#x27; }, ` Sheet limit ${fmtMs(dtSheet)}`, labels);
-    add(&#x27;text&#x27;, { x: xRate, y: m.top + 23, &#x27;text-anchor&#x27;: xRate &gt; m.left + pw * 0.75 ? &#x27;end&#x27; : &#x27;start&#x27;, class: &#x27;prt-label&#x27; }, ` 1/${rate.toFixed(1)} Hz`, labels);
-    updateSampling(rate, mean, urms, k, designU, structureMm / 1000);
-  };
-
-  controls.forEach(control =&gt; control.addEventListener(&#x27;input&#x27;, update));
-  useRate.addEventListener(&#x27;click&#x27;, () =&gt; {
-    const rate = Math.max(val(&#x27;prt-rate&#x27;), 1e-9);
-    root.querySelector(&#x27;#prt-dt&#x27;).value = (1000 / rate).toFixed(3);
-    update();
-  });
-  update();
-})();
-&lt;/script&gt;
-
-&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  if (window.FloatingUIDOM == null) {
-    return;
   }
-  const { autoUpdate, computePosition, flip, offset, shift, size } =
-    window.FloatingUIDOM;
-  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
-  const tooltipId = `codex-visualization-tooltip-${
-    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
-  }`;
-  const tooltipGap = 5;
-  const hoverDelay = 700;
-  const skipDelay = 300;
-  let activeTrigger = null;
-  let pendingTrigger = null;
-  let tooltip = null;
-  let openTimeout = null;
-  let autoUpdateCleanup = null;
-  let positionRequest = 0;
-  let skipDelayUntil = 0;
+  return { points, ni: correlation.ni, allowedPx: displacement.allowedPx };
+}
 
-  const getTrigger = (target) =&gt;
-    target?.nodeType === Node.ELEMENT_NODE
-      ? target.closest(&quot;[data-tooltip]&quot;)
-      : null;
-  const containsTarget = (trigger, target) =&gt;
-    target?.nodeType != null &amp;&amp; trigger.contains(target);
-  const getContent = (trigger) =&gt;
-    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
-  const getPlacement = (trigger) =&gt; {
-    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
-    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
-  };
-  const getTooltip = () =&gt; {
-    if (tooltip == null) {
-      tooltip = document.createElement(&quot;div&quot;);
-      tooltip.id = tooltipId;
-      tooltip.className = &quot;tooltip&quot;;
-      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+/* ---- src/presets.js ---- */
+/*
+ * Starting points for common 2D PIV arrangements. Values are SI and complete:
+ * selecting a preset replaces the whole input set.
+ */
+
+
+const water = {
+  fluidDensity: FLUIDS.water.density,
+  fluidViscosity: FLUIDS.water.viscosity,
+  particleDiameter: 10e-6,
+  particleDensity: 1050
+};
+
+const air = {
+  fluidDensity: FLUIDS.air.density,
+  fluidViscosity: FLUIDS.air.viscosity,
+  particleDiameter: 1e-6,
+  particleDensity: 900
+};
+
+const PRESETS = [
+  {
+    id: 'water-channel',
+    label: 'Water channel, 15 Hz Nd:YAG',
+    note: 'Bench-top channel with a double-pulse laser. Time resolution is the binding constraint.',
+    input: { ...DEFAULTS }
+  },
+  {
+    id: 'water-timeresolved',
+    label: 'Water tunnel, time resolved',
+    note: 'High-speed camera and pulsed diode laser at 500 Hz; large pixels need a slow lens.',
+    input: {
+      ...DEFAULTS,
+      ...water,
+      dt: 7e-4,
+      rate: 500,
+      uMean: 0.3,
+      uRms: 0.05,
+      wMean: 0,
+      wRms: 0.03,
+      fovWidth: 0.06,
+      imageWidthPx: 1024,
+      pixelPitch: 20e-6,
+      fNumber: 22,
+      wavelength: 527e-9,
+      sheetThickness: 1.5e-3,
+      concentration: 4e9,
+      structureLength: 0.015
     }
-    return tooltip;
-  };
-  const setDescribedBy = (trigger, described) =&gt; {
-    const ids = new Set(
-      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
-        .split(/\s+/)
-        .filter(Boolean),
-    );
-    if (described) {
-      ids.add(tooltipId);
-    } else {
-      ids.delete(tooltipId);
+  },
+  {
+    id: 'air-jet',
+    label: 'High-speed air jet, 10 kHz',
+    note: 'Sub-10 µs pulse separation; DEHS droplets track the shear layer.',
+    input: {
+      ...DEFAULTS,
+      ...air,
+      dt: 9e-6,
+      rate: 10000,
+      uMean: 20,
+      uRms: 2,
+      wMean: 0,
+      wRms: 1.5,
+      fovWidth: 0.04,
+      imageWidthPx: 1024,
+      pixelPitch: 20e-6,
+      fNumber: 22,
+      wavelength: 527e-9,
+      sheetThickness: 1e-3,
+      concentration: 10e9,
+      structureLength: 0.02
     }
-    if (ids.size === 0) {
-      trigger.removeAttribute(&quot;aria-describedby&quot;);
-    } else {
-      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+  },
+  {
+    id: 'wind-tunnel',
+    label: 'Wind tunnel, large field of view',
+    note: 'Statistically converged mean fields; 5 Hz cannot follow structures in time.',
+    input: {
+      ...DEFAULTS,
+      ...air,
+      dt: 6e-5,
+      rate: 5,
+      uMean: 10,
+      uRms: 0.5,
+      wMean: 0,
+      wRms: 0.5,
+      fovWidth: 0.3,
+      imageWidthPx: 4096,
+      pixelPitch: 5.5e-6,
+      fNumber: 8,
+      sheetThickness: 2e-3,
+      windowPx: 48,
+      concentration: 1e9,
+      structureLength: 0.1
     }
-  };
-  const clearOpenTimeout = () =&gt; {
-    if (openTimeout != null) {
-      window.clearTimeout(openTimeout);
-      openTimeout = null;
+  },
+  {
+    id: 'plume',
+    label: 'Buoyant plume in air, 100 Hz',
+    note: 'Slow flow, so the accuracy floor rather than pair loss sets the pulse separation.',
+    input: {
+      ...DEFAULTS,
+      ...air,
+      dt: 7e-4,
+      rate: 120,
+      uMean: 0.3,
+      uRms: 0.1,
+      wMean: 0,
+      wRms: 0.05,
+      fovWidth: 0.15,
+      imageWidthPx: 2048,
+      sheetThickness: 2e-3,
+      concentration: 2e9,
+      structureLength: 0.03
     }
-    pendingTrigger = null;
-  };
-  const closeTooltip = (activateSkipDelay = true) =&gt; {
-    clearOpenTimeout();
-    positionRequest += 1;
-    autoUpdateCleanup?.();
-    autoUpdateCleanup = null;
-    if (activeTrigger == null) {
-      return;
+  }
+];
+
+const PRESET_BY_ID = Object.fromEntries(PRESETS.map((p) => [p.id, p]));
+
+/* ---- src/app.js ---- */
+/*
+ * Browser layer: builds the form, keeps the URL in sync with the inputs and
+ * renders the verdict, the three charts and the criteria list.
+ */
+
+
+/* ------------------------------------------------------------------ units */
+
+const identity = { toSI: (v) => v, toDisplay: (v) => v };
+const scaled = (factor) => ({ toSI: (v) => v * factor, toDisplay: (v) => v / factor });
+
+/*
+ * The single source of truth for the form. `key` is the query-string name used
+ * in shareable links, so it is short and must stay stable.
+ */
+const FIELDS = [
+  { id: 'rate', key: 'f', section: 'timing', label: 'Repetition rate', unit: 'Hz', min: 0.01, max: 1e6, step: 'any', ...identity,
+    help: 'Velocity fields per second. Sets the measurement cadence, not the time between the two pulses.' },
+  { id: 'dt', key: 'dt', section: 'timing', label: 'Pulse separation Δt', unit: 'µs', min: 0.01, max: 1e6, step: 'any', ...scaled(1e-6),
+    help: 'Time between the two laser pulses of one pair.' },
+  { id: 'uMean', key: 'u', section: 'timing', label: 'Mean in-plane speed', unit: 'm/s', min: 0, max: 1000, step: 'any', ...identity,
+    help: 'Largest relevant mean speed parallel to the sheet.' },
+  { id: 'uRms', key: 'ur', section: 'timing', label: 'In-plane RMS u′', unit: 'm/s', min: 0, max: 1000, step: 'any', ...identity,
+    help: 'RMS fluctuation parallel to the sheet.' },
+  { id: 'wMean', key: 'w', section: 'timing', label: 'Mean out-of-plane', unit: 'm/s', min: 0, max: 1000, step: 'any', ...identity,
+    help: 'Mean velocity normal to the sheet. Zero for a nominally two-dimensional plane.' },
+  { id: 'wRms', key: 'wr', section: 'timing', label: 'Out-of-plane RMS w′', unit: 'm/s', min: 0, max: 1000, step: 'any', ...identity,
+    help: 'RMS velocity normal to the sheet: this is what carries particles out of the light sheet.' },
+  { id: 'k', key: 'k', section: 'timing', label: 'Design multiplier k', unit: '× RMS', min: 0, max: 10, step: 0.5, ...identity,
+    help: 'Design velocities are U + k u′ and W + k w′. Three RMS is conservative for near-Gaussian fluctuations.' },
+
+  { id: 'fovWidth', key: 'fov', section: 'camera', label: 'Field of view', unit: 'mm', min: 0.01, max: 1e5, step: 'any', ...scaled(1e-3),
+    help: 'Object width imaged across the sensor width used.' },
+  { id: 'imageWidthPx', key: 'npx', section: 'camera', label: 'Image width', unit: 'px', min: 16, max: 1e5, step: 1, ...identity,
+    help: 'Pixels spanning that field of view, after cropping or binning.' },
+  { id: 'pixelPitch', key: 'pp', section: 'camera', label: 'Pixel pitch', unit: 'µm', min: 0.1, max: 100, step: 'any', ...scaled(1e-6),
+    help: 'Physical sensor pixel size. With the field of view this fixes the magnification.' },
+  { id: 'fNumber', key: 'fn', section: 'camera', label: 'Lens f-number', unit: 'f/', min: 0.7, max: 64, step: 'any', ...identity,
+    help: 'Working aperture. Stopping down enlarges the particle images and deepens the focus, at the cost of light.' },
+  { id: 'wavelength', key: 'lam', section: 'camera', label: 'Laser wavelength', unit: 'nm', min: 200, max: 1600, step: 1, ...scaled(1e-9),
+    help: 'Illumination wavelength; 532 nm for a frequency-doubled Nd:YAG.' },
+
+  { id: 'sheetThickness', key: 'dz', section: 'interrogation', label: 'Sheet thickness Δz₀', unit: 'mm', min: 0.001, max: 100, step: 'any', ...scaled(1e-3),
+    help: 'Effective illuminated thickness, not the nominal optical width.' },
+  { id: 'windowPx', key: 'win', section: 'interrogation', label: 'Final window', unit: 'px', min: 4, max: 512, step: 4, ...identity,
+    help: 'Final interrogation window size. This, not the overlap, sets the spatial resolution.' },
+  { id: 'overlap', key: 'ov', section: 'interrogation', label: 'Window overlap', unit: '%', min: 0, max: 95, step: 5, ...scaled(0.01),
+    help: 'Overlap between adjacent windows. It adds vectors, not information.' },
+  { id: 'shiftFraction', key: 'sf', section: 'interrogation', label: 'Allowed shift', unit: '% of window', min: 1, max: 100, step: 1, ...scaled(0.01),
+    help: 'Displacement cap as a fraction of the window: the quarter rule.' },
+  { id: 'sheetFraction', key: 'zf', section: 'interrogation', label: 'Allowed sheet travel', unit: '% of Δz₀', min: 1, max: 100, step: 1, ...scaled(0.01),
+    help: 'Out-of-plane travel cap as a fraction of the sheet thickness.' },
+  { id: 'sigmaPx', key: 'sig', section: 'interrogation', label: 'Correlation uncertainty', unit: 'px', min: 0.005, max: 2, step: 'any', ...identity,
+    help: 'RMS displacement error of the sub-pixel peak fit. About 0.1 px for well-formed 2–3 px particle images, and roughly 0.05 d_τ in general.' },
+  { id: 'windowShifting', key: 'ws', section: 'interrogation', label: 'Window shifting or multi-pass', type: 'checkbox',
+    help: 'Iterative window offset removes in-plane loss of pairs, so F_I is taken as 1.' },
+
+  { id: 'fluidDensity', key: 'rf', section: 'seeding', label: 'Fluid density', unit: 'kg/m³', min: 0.001, max: 20000, step: 'any', ...identity,
+    help: 'Density of the working fluid.' },
+  { id: 'fluidViscosity', key: 'mu', section: 'seeding', label: 'Dynamic viscosity', unit: 'µPa·s', min: 0.1, max: 1e7, step: 'any', ...scaled(1e-6),
+    help: 'Dynamic viscosity: 18.25 µPa·s for air, 1002 µPa·s for water at 20 °C.' },
+  { id: 'particleDiameter', key: 'dp', section: 'seeding', label: 'Tracer diameter', unit: 'µm', min: 0.01, max: 1000, step: 'any', ...scaled(1e-6),
+    help: 'Mean tracer diameter. Larger particles scatter more light but follow the flow less well.' },
+  { id: 'particleDensity', key: 'rp', section: 'seeding', label: 'Tracer density', unit: 'kg/m³', min: 1, max: 20000, step: 'any', ...identity,
+    help: 'Tracer material density.' },
+  { id: 'concentration', key: 'c', section: 'seeding', label: 'Seeding concentration', unit: 'per mm³', min: 0.001, max: 1e5, step: 'any', ...scaled(1e9),
+    help: 'Number density of tracers. Together with the window volume this gives the particle images per window.' },
+
+  { id: 'structureLength', key: 'L', section: 'target', label: 'Structure length L', unit: 'mm', min: 0.001, max: 1e5, step: 'any', ...scaled(1e-3),
+    help: 'Wavelength of the smallest flow structure you intend to resolve. Checked against the window filter, the vector spacing and the repetition rate.' }
+];
+
+const SECTIONS = [
+  { id: 'timing', title: 'Timing and flow' },
+  { id: 'camera', title: 'Camera and lens' },
+  { id: 'interrogation', title: 'Sheet and interrogation' },
+  { id: 'seeding', title: 'Seeding and tracers' },
+  { id: 'target', title: 'Target structure' }
+];
+
+/* What to change when a criterion is not met. */
+const REMEDIES = {
+  pair: 'shorten Δt, enlarge the final window or thicken the sheet',
+  correlation: 'seed more densely, enlarge the window or shorten Δt',
+  accuracy: 'lengthen Δt, magnify more or accept a coarser velocity resolution',
+  frame: 'lower the repetition rate or shorten Δt',
+  particleImage: 'change the aperture: stopping down enlarges the particle images',
+  depthOfField: 'stop the lens down or thin the light sheet',
+  gradient: 'shorten Δt or use smaller windows with window deformation',
+  spatial: 'use smaller windows or a smaller field of view',
+  sampling: 'increase the overlap or use smaller windows',
+  temporal: 'raise the repetition rate or accept larger structures',
+  stokes: 'use smaller or lighter tracers',
+  settling: 'match the tracer density to the fluid or use smaller tracers'
+};
+
+/* ------------------------------------------------------------- formatting */
+
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+const fmtTime = (s) => {
+  if (!Number.isFinite(s)) return '—';
+  if (s < 1e-6) return `${(s * 1e9).toFixed(0)} ns`;
+  if (s < 1e-3) return `${(s * 1e6).toPrecision(3)} µs`;
+  if (s < 1) return `${(s * 1e3).toPrecision(3)} ms`;
+  return `${s.toPrecision(3)} s`;
+};
+
+const fmtLength = (m) => {
+  if (!Number.isFinite(m)) return '—';
+  if (m < 1e-3) return `${(m * 1e6).toPrecision(3)} µm`;
+  if (m < 1) return `${(m * 1e3).toPrecision(3)} mm`;
+  return `${m.toPrecision(3)} m`;
+};
+
+const fmtFreq = (hz) =>
+  !Number.isFinite(hz) ? '—' : hz >= 1000 ? `${(hz / 1000).toPrecision(3)} kHz` : `${hz.toPrecision(3)} Hz`;
+
+const tidy = (v) => Number(Number(v).toPrecision(6));
+
+const fmtSpeed = (v) =>
+  v < 0.1 ? `${Number((v * 1000).toPrecision(3))} mm/s` : `${Number(v.toPrecision(3))} m/s`;
+
+const fmtPercent = (v) => `${Number((v * 100).toPrecision(3))} %`;
+
+/* A decade window around everything worth showing, at least three decades wide. */
+const dtDomain = (result) => {
+  const t = result.timing;
+  const values = [t.dt, t.dtFloor, t.dtImage, t.dtSheet, t.dtCorrelation, t.dtRecommended]
+    .filter((v) => Number.isFinite(v) && v > 0);
+  if (!values.length) return [1e-7, 1];
+  let lo = Math.floor(Math.log10(Math.min(...values) / 2));
+  let hi = Math.ceil(Math.log10(Math.max(...values) * 2));
+  while (hi - lo < 2) { lo -= 1; hi += 1; }
+  if (hi - lo > 6) lo = hi - 6;
+  return [10 ** lo, 10 ** hi];
+};
+
+/* Round up to the next 1, 2 or 5 times a power of ten. */
+const niceCeil = (value) => {
+  if (!(value > 0)) return 1;
+  const exponent = Math.floor(Math.log10(value));
+  const base = 10 ** exponent;
+  const step = [1, 2, 5, 10].find((s) => value <= s * base) ?? 10;
+  return step * base;
+};
+
+/* --------------------------------------------------------------- elements */
+
+const NS = 'http://www.w3.org/2000/svg';
+
+const el = (tag, attrs = {}, children = []) => {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    if (key === 'class') node.className = value;
+    else if (key === 'text') node.textContent = value;
+    else if (value !== undefined && value !== null) node.setAttribute(key, value);
+  }
+  for (const child of [].concat(children)) if (child) node.appendChild(child);
+  return node;
+};
+
+const svg = (tag, attrs = {}, text) => {
+  const node = document.createElementNS(NS, tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    if (value !== undefined && value !== null) node.setAttribute(key, value);
+  }
+  if (text !== undefined) node.textContent = text;
+  return node;
+};
+
+const clear = (node) => {
+  while (node.firstChild) node.removeChild(node.firstChild);
+};
+
+/* ----------------------------------------------------------------- scales */
+
+const logScale = (domain, range) => {
+  const [d0, d1] = [Math.log10(domain[0]), Math.log10(domain[1])];
+  const [r0, r1] = range;
+  const fn = (v) =>
+    r0 + ((Math.log10(clamp(v, domain[0], domain[1])) - d0) / (d1 - d0)) * (r1 - r0);
+  fn.domain = domain;
+  fn.range = range;
+  return fn;
+};
+
+const linScale = (domain, range) => {
+  const [d0, d1] = domain;
+  const [r0, r1] = range;
+  return (v) => r0 + ((clamp(v, d0, d1) - d0) / (d1 - d0 || 1)) * (r1 - r0);
+};
+
+const decades = (lo, hi) => {
+  const out = [];
+  for (let e = Math.ceil(Math.log10(lo)); e <= Math.floor(Math.log10(hi)); e += 1) {
+    out.push(10 ** e);
+  }
+  return out;
+};
+
+/* ------------------------------------------------------------------ state */
+
+let state = { ...DEFAULTS };
+let activePreset = 'water-channel';
+
+const readUrl = () => {
+  const raw = location.hash.replace(/^#/, '');
+  if (!raw) return null;
+  const params = new URLSearchParams(raw);
+  if (![...params.keys()].length) return null;
+  const preset = params.get('p');
+  const base = preset && PRESET_BY_ID[preset] ? { ...PRESET_BY_ID[preset].input } : { ...DEFAULTS };
+  if (preset && PRESET_BY_ID[preset]) activePreset = preset;
+  for (const field of FIELDS) {
+    if (!params.has(field.key)) continue;
+    const value = params.get(field.key);
+    if (field.type === 'checkbox') base[field.id] = value === '1';
+    else if (Number.isFinite(Number(value))) base[field.id] = field.toSI(Number(value));
+  }
+  return base;
+};
+
+const writeUrl = () => {
+  const params = new URLSearchParams();
+  params.set('p', activePreset);
+  const base = PRESET_BY_ID[activePreset]?.input ?? DEFAULTS;
+  for (const field of FIELDS) {
+    if (field.type === 'checkbox') {
+      if (Boolean(state[field.id]) === Boolean(base[field.id])) continue;
+      params.set(field.key, state[field.id] ? '1' : '0');
+      continue;
     }
-    setDescribedBy(activeTrigger, false);
-    activeTrigger = null;
-    tooltip?.remove();
-    if (activateSkipDelay) {
-      skipDelayUntil = Date.now() + skipDelay;
-    }
-  };
-  const updatePosition = (trigger, floating) =&gt; {
-    const request = ++positionRequest;
-    void computePosition(trigger, floating, {
-      middleware: [
-        offset(tooltipGap),
-        flip({ padding: tooltipGap }),
-        shift({ padding: tooltipGap }),
-        size({
-          padding: tooltipGap,
-          apply({ availableHeight, availableWidth, elements }) {
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-width&quot;,
-              `${Math.max(0, availableWidth)}px`,
-            );
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-height&quot;,
-              `${Math.max(0, availableHeight)}px`,
-            );
-          },
-        }),
-      ],
-      placement: getPlacement(trigger),
-      strategy: &quot;fixed&quot;,
-    })
-      .then(({ x, y }) =&gt; {
-        if (activeTrigger !== trigger || request !== positionRequest) {
-          return;
-        }
-        const scale = window.devicePixelRatio || 1;
-        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
-        floating.style.visibility = &quot;visible&quot;;
-      })
-      .catch(() =&gt; {
-        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
-          closeTooltip(false);
-        }
+    const value = tidy(field.toDisplay(state[field.id]));
+    if (value === tidy(field.toDisplay(base[field.id]))) continue;
+    params.set(field.key, String(value));
+  }
+  const url = `${location.pathname}${location.search}#${params.toString()}`;
+  history.replaceState(null, '', url);
+};
+
+/* ------------------------------------------------------------------- form */
+
+const buildForm = (form) => {
+  for (const section of SECTIONS) {
+    const grid = el('div', { class: 'field-grid' });
+    for (const field of FIELDS.filter((f) => f.section === section.id)) {
+      if (field.type === 'checkbox') {
+        const input = el('input', { type: 'checkbox', id: `in-${field.id}` });
+        grid.appendChild(
+          el('div', { class: 'field-check span-2', title: field.help }, [
+            input,
+            el('label', { for: `in-${field.id}`, text: field.label })
+          ])
+        );
+        continue;
+      }
+      const input = el('input', {
+        type: 'number',
+        id: `in-${field.id}`,
+        min: field.min,
+        max: field.max,
+        step: field.step,
+        inputmode: 'decimal'
       });
-  };
-  const openTooltip = (trigger) =&gt; {
-    const content = getContent(trigger);
-    if (!trigger.isConnected || content.length === 0) {
-      return;
+      grid.appendChild(
+        el('div', { class: `field${field.section === 'target' ? ' span-2' : ''}`, title: field.help }, [
+          el('div', { class: 'field-label' }, [
+            el('label', { for: `in-${field.id}`, text: field.label }),
+            el('span', { class: 'field-unit', text: field.unit })
+          ]),
+          input
+        ])
+      );
     }
-    clearOpenTimeout();
-    if (activeTrigger === trigger) {
-      return;
+    if (section.id === 'seeding') {
+      const select = el('select', { id: 'in-fluid' });
+      for (const [key, fluid] of Object.entries(FLUIDS)) {
+        select.appendChild(el('option', { value: key, text: fluid.label }));
+      }
+      grid.insertBefore(
+        el('div', { class: 'field span-2' }, [
+          el('div', { class: 'field-label' }, [el('label', { for: 'in-fluid', text: 'Working fluid' })]),
+          select
+        ]),
+        grid.firstChild
+      );
     }
-    closeTooltip();
-    const floating = getTooltip();
-    floating.textContent = content;
-    floating.style.visibility = &quot;hidden&quot;;
-    floating.style.transform = &quot;translate(0, 0)&quot;;
-    document.body.appendChild(floating);
-    activeTrigger = trigger;
-    setDescribedBy(trigger, true);
-    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
-      updatePosition(trigger, floating);
-    });
-  };
-  const requestOpen = (trigger, immediate = false) =&gt; {
-    if (
-      getContent(trigger).length === 0 ||
-      activeTrigger === trigger ||
-      pendingTrigger === trigger
-    ) {
-      return;
-    }
-    clearOpenTimeout();
-    pendingTrigger = trigger;
-    const delay =
-      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
-        ? 0
-        : hoverDelay;
-    if (delay === 0) {
-      openTooltip(trigger);
-      return;
-    }
-    openTimeout = window.setTimeout(() =&gt; {
-      openTimeout = null;
-      pendingTrigger = null;
-      openTooltip(trigger);
-    }, delay);
-  };
-  const handlePointerOpen = (event) =&gt; {
-    if (event.pointerType === &quot;touch&quot;) {
-      return;
-    }
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    requestOpen(trigger);
-  };
-  const handleLeave = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const handleFocusIn = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (trigger?.matches(&quot;:focus-visible&quot;)) {
-      requestOpen(trigger, true);
-    }
-  };
-  const handleKeyDown = (event) =&gt; {
-    if (event.key === &quot;Escape&quot;) {
-      closeTooltip();
-    }
-  };
-  const handleContextMenu = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const destroy = () =&gt; {
-    closeTooltip(false);
-    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
-    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
-    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
-    document.removeEventListener(&quot;focusout&quot;, handleLeave);
-    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
-    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
-    tooltip = null;
-  };
-
-  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
-  document.addEventListener(&quot;pointerout&quot;, handleLeave);
-  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
-  document.addEventListener(&quot;focusout&quot;, handleLeave);
-  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
-  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
-  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
-})();
-&lt;/script&gt;
-&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  const initialize = () =&gt; {
-    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
-  };
-  if (globalThis.lucide != null) {
-    initialize();
-    return;
+    form.appendChild(el('section', { class: 'card' }, [el('h2', { text: section.title }), grid]));
   }
-  document
-    .getElementById(&quot;codex-visualization-lucide&quot;)
-    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
-})();
-&lt;/script&gt;
+};
 
-&lt;/body&gt;
-&lt;/html&gt;
-"></iframe>
+const syncFluidSelect = () => {
+  const select = document.getElementById('in-fluid');
+  const match = Object.entries(FLUIDS).find(
+    ([key, fluid]) =>
+      key !== 'custom' &&
+      Math.abs(fluid.density - state.fluidDensity) < 1e-6 &&
+      Math.abs(fluid.viscosity - state.fluidViscosity) < 1e-12
+  );
+  select.value = match ? match[0] : 'custom';
+};
+
+const writeForm = () => {
+  for (const field of FIELDS) {
+    const input = document.getElementById(`in-${field.id}`);
+    if (!input) continue;
+    if (field.type === 'checkbox') input.checked = Boolean(state[field.id]);
+    else input.value = String(tidy(field.toDisplay(state[field.id])));
+  }
+  syncFluidSelect();
+};
+
+const readForm = () => {
+  const next = { ...state };
+  for (const field of FIELDS) {
+    const input = document.getElementById(`in-${field.id}`);
+    if (!input) continue;
+    if (field.type === 'checkbox') {
+      next[field.id] = input.checked;
+      continue;
+    }
+    const value = Number(input.value);
+    if (input.value !== '' && Number.isFinite(value)) next[field.id] = field.toSI(value);
+  }
+  return next;
+};
+
+/* ---------------------------------------------------------------- charts */
+
+const drawAxis = (root, { x, y0, y1, ticks, format, title, titleY, tickOffset = 16 }) => {
+  for (const tick of ticks) {
+    const px = x(tick);
+    root.appendChild(svg('line', { x1: px, y1: y0, x2: px, y2: y1, class: 'grid' }));
+    root.appendChild(
+      svg('text', { x: px, y: y1 + tickOffset, 'text-anchor': 'middle', class: 'tick' }, format(tick))
+    );
+  }
+  root.appendChild(svg('line', { x1: x.range[0], y1: y1, x2: x.range[1], y2: y1, class: 'axis' }));
+  if (title) {
+    root.appendChild(
+      svg('text', {
+        x: (x.range[0] + x.range[1]) / 2,
+        y: titleY,
+        'text-anchor': 'middle',
+        class: 'axis-title'
+      }, title)
+    );
+  }
+};
+
+const marker = (root, { x, y0, y1, label, cls, labelY, anchorFlip, skip }) => {
+  if (skip) return;
+  root.appendChild(svg('line', { x1: x, y1: y0, x2: x, y2: y1, class: cls }));
+  root.appendChild(
+    svg('text', {
+      x: anchorFlip ? x - 5 : x + 5,
+      y: labelY,
+      'text-anchor': anchorFlip ? 'end' : 'start',
+      class: 'annotation'
+    }, label)
+  );
+};
+
+const renderWindowChart = (result, DT_DOMAIN) => {
+  const node = document.getElementById('chart-window');
+  clear(node);
+  const [w, h] = [760, 284];
+  const pad = { top: 40, right: 26, bottom: 82, left: 26 };
+  const x = logScale(DT_DOMAIN, [pad.left, w - pad.right]);
+  const y0 = pad.top;
+  const y1 = h - pad.bottom;
+  const { timing } = result;
+
+  const outside = (value) => !(value >= DT_DOMAIN[0] && value <= DT_DOMAIN[1]);
+
+  const seg = (from, to, cls) => {
+    const a = x(from);
+    const b = x(to);
+    if (b - a <= 0.5) return;
+    node.appendChild(svg('rect', { x: a, y: y0, width: b - a, height: y1 - y0, class: cls }));
+  };
+
+  const floorX = timing.dtFloor;
+  const recX = timing.dtRecommended;
+  const hardX = timing.dtHard;
+  seg(DT_DOMAIN[0], floorX, 'zone-floor');
+  if (recX > floorX) seg(floorX, recX, 'zone-pass');
+  seg(Math.max(floorX, recX), hardX, 'zone-margin');
+  seg(hardX, DT_DOMAIN[1], 'zone-fail');
+
+  drawAxis(node, {
+    x,
+    y0,
+    y1,
+    ticks: decades(DT_DOMAIN[0], DT_DOMAIN[1]),
+    format: fmtTime,
+    title: 'Pulse-pair separation Δt',
+    titleY: h - 14,
+    tickOffset: 36
+  });
+
+  /* The usable band is often a fraction of a decade wide, so it also gets an
+     explicit bracket under the axis where it cannot be missed. */
+  const bracket = (from, to, cls, label) => {
+    const a = clamp(x(from), pad.left, w - pad.right);
+    const b = clamp(x(to), pad.left, w - pad.right);
+    const by = y1 + 13;
+    const stroke = cls === 'ok' ? 'band-ok' : 'band-bad';
+    node.appendChild(svg('line', { x1: a, y1: by, x2: Math.max(b, a + 1), y2: by, class: stroke }));
+    for (const px of [a, Math.max(b, a + 1)]) {
+      node.appendChild(svg('line', { x1: px, y1: by - 5, x2: px, y2: by + 5, class: stroke }));
+    }
+    const right = b > (pad.left + w - pad.right) / 2;
+    const text = svg('text', {
+      x: right ? a - 8 : b + 8,
+      y: by + 4,
+      'text-anchor': right ? 'end' : 'start',
+      class: 'annotation'
+    }, label);
+    node.appendChild(text);
+  };
+  if (timing.windowConflict) {
+    bracket(recX, floorX, 'bad', 'no Δt satisfies both limits');
+  } else {
+    bracket(floorX, recX, 'ok', `usable ${fmtTime(timing.dtFloor)} – ${fmtTime(timing.dtRecommended)}`);
+  }
+
+  const zoneLabel = (from, to, text) => {
+    const a = Math.max(x(from), pad.left);
+    const b = Math.min(x(to), w - pad.right);
+    if (b - a < 78) return;
+    node.appendChild(
+      svg('text', { x: (a + b) / 2, y: y0 + 16, 'text-anchor': 'middle', class: 'zone-label' }, text)
+    );
+  };
+  zoneLabel(DT_DOMAIN[0], floorX, 'noise limited');
+  if (recX > floorX) zoneLabel(floorX, recX, 'recommended');
+  zoneLabel(Math.max(floorX, recX), hardX, 'margin');
+  zoneLabel(hardX, DT_DOMAIN[1], 'pairs lost');
+
+  marker(node, {
+    x: x(timing.dtImage), y0, y1, skip: outside(timing.dtImage), cls: 'marker-image',
+    label: `in-plane ${fmtTime(timing.dtImage)}`,
+    labelY: y1 - 12,
+    anchorFlip: x(timing.dtImage) > w - 200
+  });
+  if (Number.isFinite(timing.dtSheet)) {
+    marker(node, {
+      x: x(timing.dtSheet), y0, y1, skip: outside(timing.dtSheet), cls: 'marker-sheet',
+      label: `sheet ${fmtTime(timing.dtSheet)}`,
+      labelY: y1 - 30,
+      anchorFlip: x(timing.dtSheet) > w - 200
+    });
+  }
+  if (timing.dtCorrelation > 0 && Number.isFinite(timing.dtCorrelation)) {
+    marker(node, {
+      x: x(timing.dtCorrelation), y0, y1, skip: outside(timing.dtCorrelation), cls: 'marker-correlation',
+      label: `N_I F_I F_O = 7 at ${fmtTime(timing.dtCorrelation)}`,
+      labelY: y1 - 48,
+      anchorFlip: x(timing.dtCorrelation) > w - 260
+    });
+  }
+  marker(node, {
+    x: x(timing.framePeriod), y0, y1, skip: outside(timing.framePeriod), cls: 'marker-rate',
+    label: `frame period ${fmtTime(timing.framePeriod)}`,
+    labelY: y0 + 34,
+    anchorFlip: x(timing.framePeriod) > w - 220
+  });
+  marker(node, {
+    x: x(timing.dt), y0: y0 - 14, y1, cls: 'marker-choice',
+    label: `chosen ${fmtTime(timing.dt)}`,
+    labelY: y0 - 20,
+    anchorFlip: x(timing.dt) > w - 160
+  });
+};
+
+const renderTradeoffChart = (result, DT_DOMAIN) => {
+  const node = document.getElementById('chart-tradeoff');
+  clear(node);
+  const [w, h] = [760, 260];
+  const pad = { top: 26, right: 66, bottom: 58, left: 62 };
+  const x = logScale(DT_DOMAIN, [pad.left, w - pad.right]);
+  const y0 = pad.top;
+  const y1 = h - pad.bottom;
+  const { points } = sweepDt(result, { min: DT_DOMAIN[0], max: DT_DOMAIN[1], samples: 200 });
+  const meritMax = niceCeil(Math.max(10, result.correlation.ni * 1.15));
+  const yMerit = linScale([0, meritMax], [y1, y0]);
+  const errDomain = [1e-4, 1];
+  const yError = logScale(errDomain, [y1, y0]);
+
+  drawAxis(node, {
+    x, y0, y1,
+    ticks: decades(DT_DOMAIN[0], DT_DOMAIN[1]),
+    format: fmtTime,
+    title: 'Pulse-pair separation Δt',
+    titleY: h - 16
+  });
+
+  /* Left axis: valid-detection merit. */
+  node.appendChild(svg('line', { x1: pad.left, y1: y0, x2: pad.left, y2: y1, class: 'axis' }));
+  for (const value of [0, meritMax / 4, meritMax / 2, (3 * meritMax) / 4, meritMax]) {
+    node.appendChild(
+      svg('text', { x: pad.left - 8, y: yMerit(value) + 4, 'text-anchor': 'end', class: 'tick' },
+        String(Number(value.toPrecision(3))))
+    );
+  }
+  node.appendChild(
+    svg('text', {
+      x: 16, y: (y0 + y1) / 2, transform: `rotate(-90 16 ${(y0 + y1) / 2})`,
+      'text-anchor': 'middle', class: 'axis-title'
+    }, 'N_I F_I F_O')
+  );
+
+  /* Right axis: relative uncertainty. */
+  node.appendChild(svg('line', { x1: w - pad.right, y1: y0, x2: w - pad.right, y2: y1, class: 'axis' }));
+  for (const value of decades(errDomain[0], errDomain[1])) {
+    node.appendChild(
+      svg('text', { x: w - pad.right + 8, y: yError(value) + 4, class: 'tick' }, fmtPercent(value))
+    );
+  }
+  node.appendChild(
+    svg('text', {
+      x: w - 12, y: (y0 + y1) / 2, transform: `rotate(-90 ${w - 12} ${(y0 + y1) / 2})`,
+      'text-anchor': 'middle', class: 'axis-title'
+    }, 'σ_U / U_d')
+  );
+
+  const path = (accessor, scale, cls) => {
+    let d = '';
+    let open = false;
+    for (const point of points) {
+      const value = accessor(point);
+      if (!Number.isFinite(value) || value <= 0) { open = false; continue; }
+      const px = x(point.dt);
+      const py = scale(value);
+      if (py < y0 - 1 || py > y1 + 1) { open = false; continue; }
+      d += `${open ? 'L' : 'M'}${px.toFixed(1)} ${py.toFixed(1)} `;
+      open = true;
+    }
+    if (d) node.appendChild(svg('path', { d: d.trim(), class: cls }));
+  };
+
+  node.appendChild(svg('line', {
+    x1: pad.left, y1: yMerit(THRESHOLDS.correlationPass),
+    x2: w - pad.right, y2: yMerit(THRESHOLDS.correlationPass), class: 'target-line'
+  }));
+  node.appendChild(svg('text', {
+    x: pad.left + 6, y: yMerit(THRESHOLDS.correlationPass) - 5, class: 'annotation'
+  }, 'merit target 7'));
+  node.appendChild(svg('line', {
+    x1: pad.left, y1: yError(THRESHOLDS.relativeErrorPass),
+    x2: w - pad.right, y2: yError(THRESHOLDS.relativeErrorPass), class: 'target-line'
+  }));
+  node.appendChild(svg('text', {
+    x: w - pad.right - 6, y: yError(THRESHOLDS.relativeErrorPass) - 5,
+    'text-anchor': 'end', class: 'annotation'
+  }, 'uncertainty target 2%'));
+
+  path((p) => p.merit, yMerit, 'curve-merit');
+  path((p) => p.relativeError, yError, 'curve-error');
+
+  marker(node, {
+    x: x(result.timing.dt), y0: y0 - 8, y1, cls: 'marker-choice',
+    label: `chosen ${fmtTime(result.timing.dt)}`,
+    labelY: y0 - 12,
+    anchorFlip: x(result.timing.dt) > w - 160
+  });
+};
+
+const renderMapChart = (result) => {
+  const node = document.getElementById('chart-map');
+  clear(node);
+  const [w, h] = [760, 420];
+  const pad = { top: 30, right: 26, bottom: 66, left: 74 };
+  const lengthDomain = [1e-4, 2];
+  const speedDomain = [1e-3, 100];
+  const x = logScale(lengthDomain, [pad.left, w - pad.right]);
+  const y = logScale(speedDomain, [h - pad.bottom, pad.top]);
+  const left = pad.left;
+  const right = w - pad.right;
+  const top = pad.top;
+  const bottom = h - pad.bottom;
+  const { input, flow, interrogation } = result;
+  const rate = input.rate;
+
+  /* Boundaries L = n U / f are straight lines of unit slope on log-log axes. */
+  const boundary = (n) => ({
+    top: x((n * speedDomain[1]) / rate),
+    bottom: x((n * speedDomain[0]) / rate)
+  });
+  const two = boundary(2);
+  const five = boundary(5);
+  node.appendChild(svg('polygon', {
+    points: `${left},${top} ${two.top},${top} ${two.bottom},${bottom} ${left},${bottom}`,
+    class: 'zone-fail'
+  }));
+  node.appendChild(svg('polygon', {
+    points: `${two.top},${top} ${five.top},${top} ${five.bottom},${bottom} ${two.bottom},${bottom}`,
+    class: 'zone-margin'
+  }));
+  node.appendChild(svg('polygon', {
+    points: `${five.top},${top} ${right},${top} ${right},${bottom} ${five.bottom},${bottom}`,
+    class: 'zone-pass'
+  }));
+
+  for (const tick of decades(lengthDomain[0], lengthDomain[1])) {
+    node.appendChild(svg('line', { x1: x(tick), y1: top, x2: x(tick), y2: bottom, class: 'grid' }));
+    node.appendChild(svg('text', { x: x(tick), y: bottom + 17, 'text-anchor': 'middle', class: 'tick' },
+      fmtLength(tick)));
+  }
+  for (const tick of decades(speedDomain[0], speedDomain[1])) {
+    node.appendChild(svg('line', { x1: left, y1: y(tick), x2: right, y2: y(tick), class: 'grid' }));
+    node.appendChild(svg('text', { x: left - 10, y: y(tick) + 4, 'text-anchor': 'end', class: 'tick' },
+      fmtSpeed(tick)));
+  }
+  node.appendChild(svg('line', { x1: left, y1: bottom, x2: right, y2: bottom, class: 'axis' }));
+  node.appendChild(svg('line', { x1: left, y1: top, x2: left, y2: bottom, class: 'axis' }));
+  node.appendChild(svg('text', { x: (left + right) / 2, y: h - 20, 'text-anchor': 'middle', class: 'axis-title' },
+    'Structure length L'));
+  node.appendChild(svg('text', {
+    x: 18, y: (top + bottom) / 2, transform: `rotate(-90 18 ${(top + bottom) / 2})`,
+    'text-anchor': 'middle', class: 'axis-title'
+  }, 'Convection velocity U_c'));
+
+  const lowU = Math.max(speedDomain[0], input.uMean - input.k * input.uRms);
+  const highU = Math.min(speedDomain[1], Math.max(speedDomain[0], input.uMean + input.k * input.uRms));
+  node.appendChild(svg('rect', {
+    x: left, y: y(highU), width: right - left, height: Math.max(1, y(lowU) - y(highU)), class: 'band-flow'
+  }));
+  node.appendChild(svg('line', { x1: left, y1: y(input.uMean), x2: right, y2: y(input.uMean), class: 'line-mean' }));
+  node.appendChild(svg('line', { x1: left, y1: y(flow.uDesign), x2: right, y2: y(flow.uDesign), class: 'line-design' }));
+
+  /* Spatial limits are vertical: they do not depend on the convection speed. */
+  const vline = (value, cls, label, labelY) => {
+    const px = x(value);
+    node.appendChild(svg('line', { x1: px, y1: top, x2: px, y2: bottom, class: cls }));
+    const flip = px > right - 150;
+    node.appendChild(svg('text', {
+      x: flip ? px - 5 : px + 5, y: labelY, 'text-anchor': flip ? 'end' : 'start', class: 'annotation'
+    }, label));
+  };
+  vline(interrogation.windowSize, 'line-window', `window ${fmtLength(interrogation.windowSize)}`, bottom - 12);
+  vline(2 * interrogation.vectorSpacing, 'line-nyquist', `2 × spacing ${fmtLength(2 * interrogation.vectorSpacing)}`, bottom - 30);
+  vline(input.structureLength, 'line-structure', `target L ${fmtLength(input.structureLength)}`, top + 42);
+
+  node.appendChild(svg('circle', {
+    cx: x(result.temporal.theoreticalLength), cy: y(flow.uDesign), r: 6, class: 'dot-theory'
+  }));
+  node.appendChild(svg('circle', {
+    cx: x(result.temporal.conservativeLength), cy: y(flow.uDesign), r: 6, class: 'dot-conservative'
+  }));
+  node.appendChild(svg('text', {
+    x: left + 8, y: y(flow.uDesign) - 8, class: 'annotation'
+  }, `U_d = ${flow.uDesign.toPrecision(3)} m/s`));
+
+  const zoneLabel = (a, b, text) => {
+    if (b - a < 90) return;
+    node.appendChild(svg('text', { x: (a + b) / 2, y: top + 18, 'text-anchor': 'middle', class: 'zone-label' }, text));
+  };
+  zoneLabel(left, two.top, 'under-sampled');
+  zoneLabel(two.top, five.top, '2–5 fields');
+  zoneLabel(five.top, right, '≥ 5 fields');
+};
+
+const LEGENDS = {
+  'legend-window': [
+    ['marker-choice', 'chosen Δt'],
+    ['marker-image', 'in-plane limit'],
+    ['marker-sheet', 'sheet limit'],
+    ['marker-correlation', 'valid-detection limit'],
+    ['marker-rate', 'frame period']
+  ],
+  'legend-tradeoff': [
+    ['curve-merit', 'valid-detection merit'],
+    ['curve-error', 'relative uncertainty'],
+    ['marker-choice', 'chosen Δt']
+  ],
+  'legend-map': [
+    ['line-design', 'design velocity U_d'],
+    ['line-mean', 'mean velocity'],
+    ['line-window', 'window width'],
+    ['line-nyquist', 'vector Nyquist'],
+    ['line-structure', 'target L']
+  ]
+};
+
+const renderLegends = () => {
+  for (const [id, entries] of Object.entries(LEGENDS)) {
+    const node = document.getElementById(id);
+    clear(node);
+    for (const [cls, label] of entries) {
+      const swatch = svg('svg', { width: 18, height: 8, 'aria-hidden': 'true' });
+      swatch.appendChild(svg('line', { x1: 0, y1: 4, x2: 18, y2: 4, class: cls }));
+      node.appendChild(el('span', {}, [swatch, el('span', { text: label })]));
+    }
+  }
+};
+
+/* ---------------------------------------------------------------- results */
+
+const statCards = (result) => {
+  const { timing, displacement, correlation, imaging, interrogation, temporal } = result;
+  return [
+    ['Recommended Δt', `≤ ${fmtTime(timing.dtRecommended)}`, `limited by ${timing.limiter}`],
+    ['Usable Δt band', timing.windowConflict ? 'none' : `${fmtTime(timing.dtFloor)} – ${fmtTime(timing.dtRecommended)}`,
+      timing.windowConflict ? 'accuracy floor is above the retention ceiling' : 'accuracy floor to recommended ceiling'],
+    ['Image displacement', `${displacement.displacementPx.toFixed(1)} px`, `cap ${displacement.allowedPx.toFixed(1)} px, DVR ${displacement.dynamicVelocityRange.toFixed(0)}:1`],
+    ['Valid-detection merit', correlation.merit.toFixed(1), `N_I = ${correlation.ni.toFixed(1)} per window`],
+    ['Particle image size', `${imaging.imageDiameterPx.toFixed(2)} px`, `M = ${imaging.magnification.toPrecision(3)}, δz = ${fmtLength(imaging.depthOfField)}`],
+    ['Velocity resolution', `${displacement.velocityResolution.toPrecision(3)} m/s`, `${(displacement.relativeError * 100).toFixed(2)} % of U_d`],
+    ['Vector spacing', fmtLength(interrogation.vectorSpacing), `${interrogation.vectorsAcross} vectors across the image`],
+    ['Fields per structure', Number.isFinite(temporal.temporalSamples) ? temporal.temporalSamples.toPrecision(3) : '∞',
+      `convection ${fmtFreq(temporal.convectionFrequency)}, Nyquist needs ${fmtFreq(2 * temporal.convectionFrequency)}`]
+  ];
+};
+
+const renderStats = (result) => {
+  const node = document.getElementById('stats');
+  clear(node);
+  for (const [label, value, note] of statCards(result)) {
+    node.appendChild(
+      el('div', { class: 'stat' }, [
+        el('span', { class: 'stat-label', text: label }),
+        el('span', { class: 'stat-value', text: value }),
+        el('span', { class: 'stat-note', text: note })
+      ])
+    );
+  }
+};
+
+const renderVerdict = (result) => {
+  const chip = document.getElementById('verdict-chip');
+  const headline = document.getElementById('verdict-headline');
+  const detail = document.getElementById('verdict-detail');
+  const banner = document.getElementById('verdict');
+  const failing = result.checks.filter((c) => c.status === 'fail');
+  const marginal = result.checks.filter((c) => c.status === 'margin');
+
+  banner.className = `card verdict verdict-${result.verdict}`;
+  chip.className = `chip chip-${result.verdict}`;
+  chip.textContent = result.verdict === 'pass' ? 'feasible' : result.verdict === 'margin' ? 'tight' : 'not feasible';
+
+  if (result.verdict === 'pass') {
+    headline.textContent = 'Every criterion is satisfied';
+    detail.textContent = `Δt = ${fmtTime(result.timing.dt)} sits inside the recommended band and the design velocity is ${result.flow.uDesign.toPrecision(3)} m/s.`;
+  } else {
+    const worst = failing.length ? failing : marginal;
+    headline.textContent = failing.length
+      ? `${failing.length} ${failing.length > 1 ? 'criteria' : 'criterion'} not met: ${worst.map((c) => c.label.toLowerCase()).join(', ')}`
+      : `Little margin on ${marginal.map((c) => c.label.toLowerCase()).join(', ')}`;
+    detail.textContent = worst
+      .map((c) => `${c.label}: ${REMEDIES[c.id] ?? 'revise the configuration'}`)
+      .join('. ') + '.';
+  }
+  if (result.timing.windowConflict) {
+    detail.textContent += ` No Δt satisfies both the ${(THRESHOLDS.relativeErrorPass * 100).toFixed(0)} % accuracy floor and the retention ceiling: enlarge the window, magnify more, or accept a coarser velocity resolution.`;
+  }
+};
+
+const renderChecks = (result) => {
+  const node = document.getElementById('checks');
+  clear(node);
+  for (const check of result.checks) {
+    node.appendChild(
+      el('div', { class: `check check-${check.status}` }, [
+        el('span', { class: 'check-label', text: check.label }),
+        el('span', { class: 'check-value', text: check.value }),
+        el('span', { class: `chip chip-${check.status}`, text: check.status }),
+        el('span', { class: 'check-detail', text: check.detail }),
+        el('span', { class: 'check-formula', text: check.formula })
+      ])
+    );
+  }
+};
+
+/* ---------------------------------------------------------------- exports */
+
+const summaryMarkdown = (result) => {
+  const lines = [];
+  lines.push('# PIV acquisition feasibility');
+  lines.push('');
+  lines.push(`Verdict: **${result.verdict}** at Δt = ${fmtTime(result.timing.dt)}, ${fmtFreq(result.input.rate)} repetition rate.`);
+  lines.push('');
+  lines.push('## Inputs');
+  lines.push('');
+  lines.push('| Quantity | Value |');
+  lines.push('| --- | --- |');
+  for (const field of FIELDS) {
+    const value = field.type === 'checkbox'
+      ? (result.input[field.id] ? 'yes' : 'no')
+      : `${tidy(field.toDisplay(result.input[field.id]))} ${field.unit}`;
+    lines.push(`| ${field.label} | ${value} |`);
+  }
+  lines.push('');
+  lines.push('## Derived');
+  lines.push('');
+  lines.push('| Quantity | Value | Note |');
+  lines.push('| --- | --- | --- |');
+  for (const [label, value, note] of statCards(result)) lines.push(`| ${label} | ${value} | ${note} |`);
+  lines.push('');
+  lines.push('## Criteria');
+  lines.push('');
+  lines.push('| Criterion | Value | Status | Detail |');
+  lines.push('| --- | --- | --- | --- |');
+  for (const check of result.checks) {
+    lines.push(`| ${check.label} | ${check.value} | ${check.status} | ${check.detail} |`);
+  }
+  lines.push('');
+  lines.push(`Link: ${location.href}`);
+  return lines.join('\n');
+};
+
+const toast = (message) => {
+  const node = document.getElementById('toast');
+  node.textContent = message;
+  node.dataset.visible = 'true';
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => { node.dataset.visible = 'false'; }, 1800);
+};
+
+const copyText = async (text, message) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast(message);
+  } catch {
+    const area = el('textarea', { class: 'sr-only' });
+    area.value = text;
+    document.body.appendChild(area);
+    area.select();
+    const ok = document.execCommand?.('copy');
+    area.remove();
+    toast(ok ? message : 'Copy failed; select the text manually');
+  }
+};
+
+const downloadJson = (result) => {
+  const payload = {
+    tool: 'piv-acquisition-feasibility-calculator',
+    preset: activePreset,
+    link: location.href,
+    inputsSI: result.input,
+    verdict: result.verdict,
+    checks: result.checks.map(({ id, label, value, detail, status, formula }) => ({
+      id, label, value, detail, status, formula
+    })),
+    derived: {
+      imaging: result.imaging,
+      flow: result.flow,
+      displacement: result.displacement,
+      correlation: result.correlation,
+      interrogation: result.interrogation,
+      gradient: result.gradient,
+      tracer: result.tracer,
+      timing: result.timing,
+      temporal: result.temporal
+    }
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = el('a', { href: url, download: 'piv-feasibility.json' });
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+  toast('Downloaded piv-feasibility.json');
+};
+
+/* ------------------------------------------------------------------- boot */
+
+const render = () => {
+  const result = evaluate(state);
+  renderVerdict(result);
+  renderStats(result);
+  const domain = dtDomain(result);
+  renderWindowChart(result, domain);
+  renderTradeoffChart(result, domain);
+  renderMapChart(result);
+  renderChecks(result);
+  writeUrl();
+  return result;
+};
+
+const applyTheme = (theme) => {
+  const root = document.documentElement;
+  if (theme) root.setAttribute('data-theme', theme);
+  else root.removeAttribute('data-theme');
+  document.getElementById('action-theme').setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+};
+
+const storedTheme = () => {
+  try { return localStorage.getItem('piv-theme'); } catch { return null; }
+};
+
+const init = () => {
+  const form = document.getElementById('controls');
+  buildForm(form);
+  renderLegends();
+
+  const preset = document.getElementById('preset');
+  for (const item of PRESETS) preset.appendChild(el('option', { value: item.id, text: item.label }));
+
+  const fromUrl = readUrl();
+  state = fromUrl ?? { ...PRESET_BY_ID[activePreset].input };
+  preset.value = activePreset;
+  writeForm();
+  render();
+
+  form.addEventListener('input', () => {
+    state = readForm();
+    syncFluidSelect();
+    render();
+  });
+
+  document.getElementById('in-fluid').addEventListener('change', (event) => {
+    const fluid = FLUIDS[event.target.value];
+    if (!fluid) return;
+    state = { ...state, fluidDensity: fluid.density, fluidViscosity: fluid.viscosity };
+    writeForm();
+    render();
+  });
+
+  preset.addEventListener('change', (event) => {
+    const item = PRESET_BY_ID[event.target.value];
+    if (!item) return;
+    activePreset = item.id;
+    state = { ...item.input };
+    writeForm();
+    render();
+    toast(item.note);
+  });
+
+  document.getElementById('action-link').addEventListener('click', () => {
+    writeUrl();
+    copyText(location.href, 'Link copied');
+  });
+  document.getElementById('action-summary').addEventListener('click', () => {
+    copyText(summaryMarkdown(evaluate(state)), 'Summary copied as Markdown');
+  });
+  document.getElementById('action-json').addEventListener('click', () => downloadJson(evaluate(state)));
+  document.getElementById('action-theme').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('piv-theme', next); } catch { /* private mode */ }
+  });
+
+  window.addEventListener('hashchange', () => {
+    const next = readUrl();
+    if (!next) return;
+    state = next;
+    document.getElementById('preset').value = activePreset;
+    writeForm();
+    render();
+  });
+
+  applyTheme(storedTheme());
+};
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+})();
+</script>
 </body>
 </html>

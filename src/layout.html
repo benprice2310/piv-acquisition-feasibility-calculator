@@ -1,0 +1,134 @@
+<div class="page">
+  <header class="masthead">
+    <div>
+      <h1>PIV acquisition feasibility calculator</h1>
+      <p class="text-muted text-small">
+        Planning tool for two-dimensional particle image velocimetry. It turns a laser,
+        camera, lens, seeding and flow description into the pulse separation you can
+        actually use, and into the scales that survive correlation. Everything is
+        computed in the browser; nothing is sent anywhere.
+      </p>
+    </div>
+    <div class="toolbar">
+      <label class="sr-only" for="preset">Preset configuration</label>
+      <select id="preset" aria-label="Preset configuration"></select>
+      <button type="button" class="btn" id="action-link" title="Copy a link that restores these inputs">Copy link</button>
+      <button type="button" class="btn" id="action-summary" title="Copy a Markdown summary of the result">Copy summary</button>
+      <button type="button" class="btn" id="action-json" title="Download inputs and results as JSON">JSON</button>
+      <button type="button" class="btn" id="action-theme" aria-pressed="false" title="Switch between light and dark">Theme</button>
+    </div>
+  </header>
+
+  <noscript>
+    <p class="card mt-18">This calculator needs JavaScript: every number on the page is derived from your inputs in the browser.</p>
+  </noscript>
+
+  <div class="layout">
+    <form class="controls" id="controls" autocomplete="off" novalidate></form>
+
+    <div class="results">
+      <div class="card verdict" id="verdict" aria-live="polite">
+        <span class="chip chip-pass" id="verdict-chip">pass</span>
+        <span class="verdict-headline" id="verdict-headline"></span>
+        <span class="verdict-detail text-small text-muted" id="verdict-detail"></span>
+      </div>
+
+      <div class="card">
+        <div class="stat-grid" id="stats" aria-live="polite"></div>
+      </div>
+
+      <figure class="chart card">
+        <h2>Pulse-separation operating window</h2>
+        <svg id="chart-window" viewBox="0 0 760 284" role="img" aria-labelledby="chart-window-title chart-window-desc">
+          <title id="chart-window-title">Usable range of pulse-pair separation</title>
+          <desc id="chart-window-desc">A logarithmic time axis showing the accuracy floor, the recommended band, the remaining margin and the region where particle pairs are lost, with the chosen separation marked.</desc>
+        </svg>
+        <div class="legend" id="legend-window"></div>
+        <figcaption>
+          Below the floor the displacement is too small to measure accurately; above the
+          ceiling particle pairs leave the window or the sheet. Useful settings live in between.
+        </figcaption>
+      </figure>
+
+      <figure class="chart card">
+        <h2>What the pulse separation costs and buys</h2>
+        <svg id="chart-tradeoff" viewBox="0 0 760 260" role="img" aria-labelledby="chart-tradeoff-title chart-tradeoff-desc">
+          <title id="chart-tradeoff-title">Valid-detection merit and relative velocity uncertainty against pulse separation</title>
+          <desc id="chart-tradeoff-desc">Two curves over the same logarithmic time axis: the Keane and Adrian valid-detection figure of merit, which falls as the separation grows, and the relative velocity uncertainty, which also falls as the separation grows.</desc>
+        </svg>
+        <div class="legend" id="legend-tradeoff"></div>
+        <figcaption>
+          Lengthening the pulse separation buys precision and spends correlation
+          quality. The workable separation is where both curves are still acceptable.
+        </figcaption>
+      </figure>
+
+      <figure class="chart card">
+        <h2>Resolvable structures</h2>
+        <svg id="chart-map" viewBox="0 0 760 420" role="img" aria-labelledby="chart-map-title chart-map-desc">
+          <title id="chart-map-title">Structure length against convection velocity</title>
+          <desc id="chart-map-desc">A log-log map separating structures sampled fewer than two times, two to five times and at least five times as they convect past the plane, overlaid with the interrogation window width and the vector-spacing Nyquist limit.</desc>
+        </svg>
+        <div class="legend" id="legend-map"></div>
+        <figcaption>
+          Horizontal limits come from the repetition rate, vertical limits from the
+          interrogation window. A structure has to clear both to be measured.
+        </figcaption>
+      </figure>
+
+      <section class="card">
+        <h2>Criteria</h2>
+        <div class="checks" id="checks" aria-live="polite"></div>
+      </section>
+
+      <details class="method card">
+        <summary>Method, thresholds and references</summary>
+        <p class="text-small text-muted">
+          Symbols: <code>s</code> image scale in metres per pixel, <code>M</code> magnification,
+          <code>D_I</code> interrogation window in pixels, <code>D_w</code> window width in metres,
+          <code>Δz₀</code> sheet thickness, <code>U_d = U + k u′</code> and <code>W_d = W + k w′</code>
+          design velocities, <code>L</code> the structure length you want to resolve.
+        </p>
+        <dl>
+          <dt>M = p / s</dt>
+          <dd>Magnification from the pixel pitch <code>p</code> and the image scale.</dd>
+          <dt>d_diff = 2.44 f# (1 + M) λ</dt>
+          <dd>Diffraction-limited image of a point source.</dd>
+          <dt>d_τ = √((M d_p)² + d_diff²)</dt>
+          <dd>Particle-image diameter. Below about 2 px the sub-pixel peak estimator locks to integer displacements; 2–4 px minimises the random error.</dd>
+          <dt>δz = 2 f# d_diff (1 + M) / M²</dt>
+          <dd>Depth of field. When it is thinner than the light sheet, out-of-focus particles add noise instead of signal.</dd>
+          <dt>ΔX = U_d Δt / s</dt>
+          <dd>Particle-image displacement. The quarter rule keeps it below a set fraction of the window.</dd>
+          <dt>N_I F_I F_O ≥ 7</dt>
+          <dd>Valid-detection criterion of Keane &amp; Adrian: particle images per window, reduced by in-plane loss <code>F_I = 1 − ΔX / D_I</code> and out-of-plane loss <code>F_O = 1 − W_d Δt / Δz₀</code>. Window shifting or multi-pass correlation removes the in-plane term.</dd>
+          <dt>σ_U = σ_px s / Δt</dt>
+          <dd>Velocity resolution from the correlation uncertainty. It sets the accuracy floor on Δt and the dynamic velocity range <code>DVR = ΔX_max / σ_px</code>.</dd>
+          <dt>A/A₀ = |sinc(D_w / L)|</dt>
+          <dd>Amplitude of a sinusoidal structure of wavelength <code>L</code> surviving the window's top-hat average. Overlap adds vectors but not information.</dd>
+          <dt>|∂ΔX/∂x| ≤ 0.05</dt>
+          <dd>Displacement gradient across a window, estimated from <code>Δu ≈ k u′ D_w / L</code>. The classical Keane &amp; Adrian form <code>a = M |Δu| Δt / d_τ</code> is reported alongside it.</dd>
+          <dt>St = τ_p U_d / L</dt>
+          <dd>Tracer Stokes number with <code>τ_p = ρ_p d_p² / (18 μ)</code>. Settling adds a bias <code>U_g = d_p² (ρ_p − ρ_f) g / (18 μ)</code>.</dd>
+          <dt>N_t = f L / U_d</dt>
+          <dd>PIV fields acquired while the structure convects past the plane, under Taylor's frozen-turbulence hypothesis. Two is the Nyquist limit, five a conservative planning target.</dd>
+        </dl>
+        <p class="text-small text-muted mt-12">
+          Sources: R. D. Keane and R. J. Adrian, <em>Optimization of particle image
+          velocimeters</em>, Meas. Sci. Technol. 1 (1990) 1202; R. J. Adrian and J. Westerweel,
+          <em>Particle Image Velocimetry</em>, Cambridge, 2011; M. Raffel et al.,
+          <em>Particle Image Velocimetry: A Practical Guide</em>, 3rd ed., Springer, 2018;
+          J. Westerweel, <em>Fundamentals of digital particle image velocimetry</em>,
+          Meas. Sci. Technol. 8 (1997) 1379.
+        </p>
+        <ul>
+          <li>This is an acquisition-planning tool, not a guarantee that correlation will succeed. It says nothing about calibration, illumination uniformity, reflections, timing jitter or the processing algorithm.</li>
+          <li>The velocity difference across a window is estimated from the design fluctuation and the structure length; substitute your own shear estimate when you have one.</li>
+          <li>Thresholds are conventional practice, not physical laws. Where a limit is a convention rather than a bound, the criterion says so.</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>

@@ -1,0 +1,165 @@
+/* Design tokens and primitives. Light and dark are both first-class. */
+
+:root {
+  color-scheme: light dark;
+
+  --background: light-dark(rgb(252 252 253), rgb(21 22 24));
+  --surface: light-dark(rgb(255 255 255), rgb(30 31 34));
+  --foreground: light-dark(rgb(26 28 31), rgb(240 241 243));
+  --muted: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --muted-foreground: light-dark(rgb(26 28 31 / 58%), rgb(240 241 243 / 58%));
+  --border: light-dark(rgb(26 28 31 / 11%), rgb(255 255 255 / 12%));
+  --input: light-dark(rgb(26 28 31 / 14%), rgb(255 255 255 / 16%));
+  --ring: light-dark(rgb(24 118 210), rgb(131 195 255));
+  --primary: light-dark(rgb(24 118 210), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --accent: light-dark(rgb(232 241 252), rgb(20 40 62));
+
+  --pass: light-dark(rgb(22 128 84), rgb(94 208 155));
+  --pass-bg: light-dark(rgb(22 128 84 / 12%), rgb(94 208 155 / 15%));
+  --margin: light-dark(rgb(176 106 8), rgb(240 178 84));
+  --margin-bg: light-dark(rgb(176 106 8 / 12%), rgb(240 178 84 / 15%));
+  --fail: light-dark(rgb(197 58 32), rgb(255 138 106));
+  --fail-bg: light-dark(rgb(197 58 32 / 12%), rgb(255 138 106 / 15%));
+
+  --series-1: var(--primary);
+  --series-2: light-dark(rgb(214 108 26), rgb(245 165 96));
+  --series-3: light-dark(rgb(37 145 118), rgb(96 205 180));
+  --series-4: light-dark(rgb(139 96 220), rgb(178 152 240));
+
+  --font-sans: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --font-size-base: 14px;
+  --radius: 12px;
+  --radius-sm: 7px;
+  --radius-full: 999px;
+  --shadow: 0 1px 2px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 30%));
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  padding: 0;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, figure { margin: 0; }
+h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 1rem; font-weight: 600; }
+h3 { font-size: 0.875rem; font-weight: 600; }
+
+a { color: var(--primary); text-underline-offset: 2px; }
+
+code, .mono { font-family: var(--font-mono); font-size: 0.92em; }
+
+.card {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.text-muted { color: var(--muted-foreground); }
+.text-small { font-size: 0.8125rem; line-height: 1.45; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+button, input, select { font: inherit; color: inherit; }
+
+.btn {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:hover { background: color-mix(in srgb, var(--foreground) 6%, var(--surface)); }
+.btn:active { transform: translateY(0.5px); }
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn-primary:hover { background: color-mix(in srgb, var(--foreground) 14%, var(--primary)); }
+
+:is(.btn, input, select):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.field { display: grid; gap: 3px; }
+
+.field > .field-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.field-unit { color: var(--muted-foreground); font-size: 0.75rem; }
+
+input[type="number"], select {
+  width: 100%;
+  min-height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+}
+
+input[type="number"]:invalid { border-color: var(--fail); }
+
+.field-check { display: flex; align-items: center; gap: 8px; }
+.field-check input { width: 16px; height: 16px; accent-color: var(--primary); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 9px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.chip::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentcolor;
+  content: "";
+}
+
+.chip-pass { color: var(--pass); background: var(--pass-bg); }
+.chip-margin { color: var(--margin); background: var(--margin-bg); }
+.chip-fail { color: var(--fail); background: var(--fail-bg); }

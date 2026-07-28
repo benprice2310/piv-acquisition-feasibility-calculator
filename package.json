@@ -1,0 +1,15 @@
+{
+  "name": "piv-acquisition-feasibility-calculator",
+  "version": "2.0.0",
+  "description": "Browser-based planning tool for two-dimensional particle image velocimetry",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test 'test/*.test.mjs'",
+    "check": "npm run build && npm test && git diff --exit-code -- index.html",
+    "serve": "node --run build && python3 -m http.server 8080"
+  }
+}
